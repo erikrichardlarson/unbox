@@ -47,7 +47,7 @@ def run():
 
         conn = sqlite.connect(db_path)
         c = conn.cursor()
-        c.execute(# This is where the db is decypted)
+        c.execute(# This is where the db is decrypted)
         tracks = pd.read_sql(query, conn)
         c.close()
 
