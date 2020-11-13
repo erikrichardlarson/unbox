@@ -1,5 +1,5 @@
 # unbox
-Log your rekordbox tracks to a txt file as they're played.
+Log your rekordbox tracks to a txt file as they're played. Inspired by PRACT OBS.
 
 Download the zip file from the releases section https://github.com/erikrichardlarson/unbox/releases/download/1/unbox.zip, open this zip file, and open the app. Here's what you'll see:
 
@@ -9,5 +9,4 @@ Download the zip file from the releases section https://github.com/erikrichardla
 
 When the app is open, it will log your recent rekordbox history to a txt file that can be used in OBS. This file updates in real-time. 
 
-Currently this only works on Mac, but a Windows version is coming out very soon. 
-
+Currently this only works on the Mac version of rekordbox 6, but a Windows version is coming out very soon. 
