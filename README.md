@@ -1,7 +1,7 @@
 # unbox
 Log your rekordbox tracks to a txt file as they're played.
 
-Download the zip file over in the releases section, open the zip file, and open the app. Here's what you'll see:
+Download the zip file from the releases section https://github.com/erikrichardlarson/unbox/releases/download/1/unbox.zip, open this zip file, and open the app. Here's what you'll see:
 
 ![](https://github.com/erikrichardlarson/unbox/blob/main/Screen%20Shot%202020-11-12%20at%205.14.21%20PM.png)
 
