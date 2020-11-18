@@ -5,7 +5,7 @@ Download one of the below zip files.
 
 Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/1/unbox_mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/1/unbox_windows.zip)
 
-Open this zip file, and open the app. Here's what you'll see:
+Open the zip file you downloaded above, and open the app. Here's what you'll see:
 
 ![](https://github.com/erikrichardlarson/unbox/blob/main/Screen%20Shot%202020-11-12%20at%205.14.21%20PM.png)
 
