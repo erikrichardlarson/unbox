@@ -1,7 +1,7 @@
 # unbox
 Log your rekordbox tracks to a txt file or HTML page as they're played. Inspired by PRACT OBS and ASOT.
 
-Browser sources are now available for Mac. You can add http://localhost:8080/play_history.html or http://localhost:8080/now_playing.html as a browser source to OBS and you'll see your rekordbox tracks in the formats below:
+Browser sources are now available. You can add http://localhost:8080/play_history.html or http://localhost:8080/now_playing.html as a browser source to OBS and you'll see your rekordbox tracks in the formats below:
 
 ![](https://cdn.discordapp.com/attachments/780172543771410452/783904760880562176/Screen_Shot_2020-12-02_at_7.56.55_PM.png)
 
