@@ -1,9 +1,17 @@
 # unbox
-Log your rekordbox tracks to a txt file as they're played. Inspired by PRACT OBS.
+Log your rekordbox tracks to a txt file or HTML page as they're played. Inspired by PRACT OBS and ASOT.
 
-Download one of the below zip files. 
+Browser sources are now available for Mac. You can add either of these browser sources to OBS and you'll see your rekordbox tracks in the formats below:
 
-Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/2.0/unbox_mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/2.0/unbox_windows.zip)
+http://localhost:8080/play_history.html
+http://localhost:8080/now_playing.html
+
+![](https://cdn.discordapp.com/attachments/780172543771410452/783904760880562176/Screen_Shot_2020-12-02_at_7.56.55_PM.png)
+
+
+![](https://cdn.discordapp.com/attachments/780172543771410452/783841115802959902/unknown.png)
+
+Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/3.0/unbox.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/2.0/unbox_windows.zip)
 
 Open the zip file you downloaded above, and open the app. On Windows you'll want to click the unbox.exe file. 
 
