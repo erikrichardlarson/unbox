@@ -8,7 +8,7 @@ Browser sources are now available for Mac. You can add http://localhost:8080/pla
 
 ![](https://cdn.discordapp.com/attachments/780172543771410452/783841115802959902/unknown.png)
 
-Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/3.0/unbox.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/2.0/unbox_windows.zip)
+Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/3.0/mac_unbox.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/3.0/windows_unbox.zip)
 
 Open the zip file you downloaded above, and open the app. On Windows you'll want to click the unbox.exe file. 
 
