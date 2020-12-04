@@ -3,12 +3,44 @@ const path = require('path');
 var sqlite3 = require('@journeyapps/sqlcipher').verbose();
 const fs = require('fs');
 const { ipcMain } = require('electron')
+var connect = require('connect');
+var serveStatic = require('serve-static');
+
+
 
 if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
 const createWindow = () => {
+
+  if (process.platform != 'darwin') {
+    var outputPath = require('os').homedir() + '\\unbox_output'
+  }
+  else {
+    var outputPath = require('os').homedir() + '/unbox_output'
+  }
+
+  fs.access(outputPath, function (error) {
+    if (error) {
+      fs.mkdirSync(outputPath);
+      fs.writeFileSync(path.join(outputPath, 'now_playing.html'), '')
+      fs.writeFileSync(path.join(outputPath, 'play_history.html'), '')
+      fs.copyFile(path.join(__dirname, 'now_playing.html'), path.join(outputPath, 'now_playing.html'), (err) => {
+        if (err) throw err;
+      });
+    
+      fs.copyFile(path.join(__dirname, 'play_history.html'), path.join(outputPath, 'play_history.html'), (err) => {
+        if (err) throw err;
+      });
+    } else {
+    }
+  })
+
+  
+
+  var server = connect().use(serveStatic(outputPath)).listen(8080);
+
   const mainWindow = new BrowserWindow({
     width: 500,
     height: 300,
@@ -18,6 +50,12 @@ const createWindow = () => {
   });
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
+  
+
+  
+
+  
+
   mainWindow.webContents.on('did-finish-load', () => {
 
     getTracks(mainWindow)
@@ -26,6 +64,10 @@ const createWindow = () => {
       getTracks(mainWindow);
     }, 10000);
 
+  })
+
+  mainWindow.on('closed', function () {
+    server.close();
   })
 
 };
@@ -47,12 +89,7 @@ const getTracks = (mainWindow) => {
   let options = JSON.parse(rawdata);
   var db_path = options['options'][0][1];
 
-  fs.access(outputPath, function (error) {
-    if (error) {
-      fs.mkdirSync(outputPath);
-    } else {
-    }
-  })
+  
 
   var timestampPath = process.env.APPDATA ? outputPath + '\\most_recent_track_timestamp.json' : outputPath + '/most_recent_track_timestamp.json';
 
@@ -84,15 +121,30 @@ const getTracks = (mainWindow) => {
       if (((most_recent_track_timestamp) && (Date.parse(row.created_at) > Date.parse(most_recent_track_timestamp))) || (!most_recent_track_timestamp)) {
 
         var streamTxtPath = process.env.APPDATA ? outputPath + '\\rekordbox_stream.txt' : outputPath + '/rekordbox_stream.txt';
+        var streamJSONPath = process.env.APPDATA ? outputPath + '\\rekordbox_stream.json' : outputPath + '/rekordbox_stream.json';
+        var historyJSONPath = process.env.APPDATA ? outputPath + '\\rekordbox_stream_history.json' : outputPath + '/rekordbox_stream_history.json';
+
+        fs.access(historyJSONPath, function (error) {
+          if (error) {
+            fs.writeFileSync(historyJSONPath, JSON.stringify({ tracks: [{ artist: row.Artist.toUpperCase(), track: row.Track.toUpperCase() }] }));
+          } else {
+            let history = JSON.parse(fs.readFileSync(historyJSONPath))['tracks'];
+            if (history.length == 3) {
+              history.pop()
+            }
+            let updatedHistory = [{ artist: row.Artist.toUpperCase(), track: row.Track.toUpperCase() }].concat(history);
+            fs.writeFileSync(historyJSONPath, JSON.stringify({ tracks: updatedHistory }));
+          }
+        })
 
         fs.writeFileSync(streamTxtPath, row.Artist + ' - ' + row.Track);
+        fs.writeFileSync(streamJSONPath, JSON.stringify({ artist: row.Artist.toUpperCase(), track: row.Track.toUpperCase() }));
 
         mainWindow.webContents.send('track-update', row.Artist + ' - ' + row.Track)
 
         most_recent_track_timestamp = row.created_at;
         let data = JSON.stringify({ timestamp: most_recent_track_timestamp });
         fs.writeFileSync(timestampPath, data);
-
       }
     });
   });
@@ -103,10 +155,10 @@ const getTracks = (mainWindow) => {
 
 app.on('ready', createWindow);
 
+
+
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  app.quit();
 });
 
 app.on('activate', () => {
