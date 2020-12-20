@@ -1,6 +1,9 @@
 # unbox - rekordbox "Now Playing" overlays for Twitch / OBS
 
 Display your current or recent rekordbox 6 tracks to your viewers on Twitch. Inspired by PRACT OBS and ASOT.
+<p align="center">
+ <img src="https://cdn.discordapp.com/attachments/780172543771410452/783904760880562176/Screen_Shot_2020-12-02_at_7.56.55_PM.png" />
+</p>
 
 **Please back up your library before using this as corruption could occur, we're not responsible for any issues, or corruption that this software may cause to your library.**
 
