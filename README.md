@@ -4,10 +4,12 @@ Display your current or recent rekordbox 6 tracks to your viewers on Twitch. Ins
 
 **Please back up your library before using this as corruption could occur, we're not responsible for any issues, or corruption that this software may cause to your library.**
 
+If unbox is useful to you and you'd like to support future development, please feel free to [donate](https://paypal.me/erikrichardlarson?locale.x=en_US). Your support is much appreciated! 
+
 ## How to use
 1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/3.0/mac_unbox.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/3.0/windows_unbox.zip) Currently there is only support for rekordbox 6. 
 
-2. **Open the zip file you downloaded above, and open the unbox app.** On Windows you'll want to click the unbox.exe file. If Windows or Mac asks you to trust unbox, you'll need to do that. The source code is in this repo if you're concerned about security. When the app is open you'll see this window:
+2. **Open the zip file you downloaded above, and open the unbox app.** On Windows you'll want to click the unbox.exe file. If Windows or Mac asks you to trust unbox, you'll need to do that. The source code is in this repo if you're concerned about security. When the app is open you'll see this window:  
 
 <img src="https://media.discordapp.net/attachments/790269915444805656/790269992322727937/Screen_Shot_2020-12-20_at_9.24.16_AM.png" data-canonical-src="https://media.discordapp.net/attachments/790269915444805656/790269992322727937/Screen_Shot_2020-12-20_at_9.24.16_AM.png" width="500" height="300" />
 
@@ -22,4 +24,3 @@ Display your current or recent rekordbox 6 tracks to your viewers on Twitch. Ins
 
 ![](https://cdn.discordapp.com/attachments/780172543771410452/783841115802959902/unknown.png)
 
-If unbox is useful to you and you'd like to support future development, please feel free to [donate](https://paypal.me/erikrichardlarson?locale.x=en_US). Your support is much appreciated! 
