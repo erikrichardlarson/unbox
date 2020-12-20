@@ -13,6 +13,7 @@ If unbox is useful to you and you'd like to support future development, please f
 <p align="center">
 <img src="https://media.discordapp.net/attachments/790269915444805656/790269992322727937/Screen_Shot_2020-12-20_at_9.24.16_AM.png" data-canonical-src="https://media.discordapp.net/attachments/790269915444805656/790269992322727937/Screen_Shot_2020-12-20_at_9.24.16_AM.png" width="500" height="300" />
 </p>
+
 3. **Just keep unbox open when you're playing.** Now that unbox is open, you have access to three things:  
 
 *  Two browser sources. The browser sources are just web pages that unbox automatically updates when it's open. These are the exact web pages you can add: http://localhost:8080/play_history.html or http://localhost:8080/now_playing.html. Below you can see what these browser sources look like.
