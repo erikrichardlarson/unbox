@@ -22,7 +22,7 @@ If unbox is useful to you and you'd like to support future development, please f
 
 2. **Open the zip file you downloaded above, and open the unbox app. Select rekordbox or Serato mode.** On Windows you'll want to click the unbox.exe file. If Windows or Mac asks you to trust unbox, you'll need to do that. The source code is in this repo if you're concerned about security. When the app is open you'll see this window:  
 <p align="center">
-<img src="https://media.discordapp.net/attachments/790269915444805656/798699727783985172/Screen_Shot_2021-01-12_at_3.47.01_PM.png?width=400&height=900" data-canonical-src="https://media.discordapp.net/attachments/790269915444805656/798699727783985172/Screen_Shot_2021-01-12_at_3.47.01_PM.png?width=400&height=900" width="400" height="900" />
+<img src="https://media.discordapp.net/attachments/790269915444805656/798699727783985172/Screen_Shot_2021-01-12_at_3.47.01_PM.png?width=200&height=450" data-canonical-src="https://media.discordapp.net/attachments/790269915444805656/798699727783985172/Screen_Shot_2021-01-12_at_3.47.01_PM.png?width=200&height=450" width="200" height="450" />
 </p>
 
 3. **Just keep unbox open when you're playing.** Now that unbox is open, you have access to four things:  
