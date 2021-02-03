@@ -15,6 +15,7 @@ If unbox is useful to you and you'd like to support future development, please f
  <a href="https://www.twitch.tv/dj_frankwillard"><img src="https://static-cdn.jtvnw.net/jtv_user_pictures/654c4e52-c532-435e-8641-969666ce348f-profile_image-300x300.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/654c4e52-c532-435e-8641-969666ce348f-profile_image-300x300.png" width="80" height="80" /></a>
 <a href="https://www.twitch.tv/djaramistv"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/93f54a41-ec11-459a-885f-bb5ce4550aa9-profile_image-300x300.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/93f54a41-ec11-459a-885f-bb5ce4550aa9-profile_image-300x300.png" width="80" height="80" /></a>
 <a href="https://www.twitch.tv/djtaylornorris"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/d533704e-55a7-4912-b744-82e0c63e93b9-profile_image-300x300.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/d533704e-55a7-4912-b744-82e0c63e93b9-profile_image-300x300.png" width="80" height="80" /></a>
+ <a href="https://www.twitch.tv/geoffbutler"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/1021dfce-899d-4567-a08a-f9ea9b282770-profile_image-70x70.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/1021dfce-899d-4567-a08a-f9ea9b282770-profile_image-70x70.png" width="80" height="80" /></a>
 </p>
 
 ## How to use
