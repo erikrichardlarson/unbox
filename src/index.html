@@ -1,18 +1,94 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>unbox</title>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-        <script defer src="render.js"></script>
-       
-    </head>
-    
-    <body class="container">
-        <h1>unbox</h1>
-        <h6>You're now logging your rekordbox in real-time to a text file.</h6>
-        <h6>You'll find a rekordbox_stream.txt file in a folder called unbox_output. This file contains the track Artist / Title pairs.</h6>
-        <h6>You can feed this file into OBS and it will automatically display what you're playing in rekordbox. 
+
+<head>
+    <title>unbox</title>
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
+
+    <script>window.$ = window.jQuery = require('jquery');</script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+        integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script defer src="render.js"></script>
+    <meta charset="utf-8" />
+
+</head>
+
+<body class="container text-center">
+    <h1>unbox</h1>
+    <div id="header">
+        <h6>Select your mode</h6>
+        <h6 id="headerHands">🙌</h6>
+    </div>
+    <hr class="mt-3 mb-3" />
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="mode" id="serato">
+        <label class="form-check-label" for="serato">
+            Serato
+        </label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="mode" id="rekordbox">
+        <label class="form-check-label" for="rekordbox">
+            Rekordbox
+        </label>
+    </div>
+    <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="mode" id="traktor">
+        <label class="form-check-label" for="traktor">
+            Traktor
+        </label>
+    </div>
+    <div id="kuvo_url" style="display: none;">
+        <hr class="mt-3 mb-3" />
+
+        <form id="kuvoform">
+            <div class="form-group">
+                <input type="text" class="form-control" id="kuvoinput" aria-describedby="emailHelp"
+                    placeholder="KUVO live playlist URL" return event.keyCode!=13>
+                <small id="emailHelp" class="form-text text-muted">Optional, KUVO allows for closer to real-time
+                    updates.</small>
+            </div>
+        </form>
+    </div>
+    <hr class="mt-3 mb-3" />
+    <button type="button" class="btn btn-danger" onclick="clearHistory()">Reset History</button>
+    <hr class="mt-3 mb-3" />
+    <div class="container text-center">
+
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Copy Overlay Link
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" id="now_playing" href="#" onclick="copyElementText(this.id)">Now Playing</a>
+                <a class="dropdown-item" id="now_playing_right" href="#"onclick="copyElementText(this.id)">Now Playing Right</a>
+                <a class="dropdown-item" id="play_history" href="#" onclick="copyElementText(this.id)">Play History</a>
+                <a class="dropdown-item" id="asot"  href="#" onclick="copyElementText(this.id)">ASOT</a>
+                <a class="dropdown-item" id="next_up" href="#" onclick="copyElementText(this.id)">Next Up</a>
+            </div>
+        </div>
         <br>
-        <h6>Here's the last track that we logged: <b><p id="last_log"></p></b></h6>
-    </body>
+        <h6 id="overlay_selection"></h6>
+    </div>
+
+    <hr class="mt-3 mb-3" />
+
+    <h6>Customize your overlay color</h6>
+    <h6 class="text-white w-50 text-center mx-auto" id="now_playing" style="background-color:rgb(222, 0, 89)">NOW
+        PLAYING</h6>
+    <input id="hexInput" value="#de0059" class="mb-2"></input>
+    <div class="container d-flex justify-content-center" id="picker"></div>
+    <br>
+    <hr class="mt-2 mb-3" />
+    <h6 id="id_header"></h6>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
 </html>

@@ -10,6 +10,19 @@
                     let response = JSON.parse(this.responseText);
                     document.getElementById('artist').innerHTML = '<b>' + response['artist'] + '</b>';
                     document.getElementById('track').innerHTML = response['track'];
+                    if (response['remix']) {
+                        document.getElementById('remix').innerHTML = '(' + response['remix'] + ')';
+                    }
+                    else {
+                        document.getElementById('remix').innerHTML = '';
+                    }
+                    if (response['label']) {
+                        document.getElementById('label').innerHTML = '[' + response['label'] + ']';
+
+                    }
+                    else {
+                        document.getElementById('label').innerHTML = '';
+                    }
                 }
             };
             xhttp.open("GET", window.location.protocol + "//" + window.location.host + "/rekordbox_stream.json", true);
@@ -39,16 +52,20 @@
 
 <body style="background-color: transparent;">
     <div class="container mt-3">
-        <div class="col-3">
-            <h6 id="now-playing" class="text-white overlay-bg-color w-50 text-center">NOW PLAYING</h6>
+        <div class="col-2">
+            <h5 id="now-playing" class="text-white overlay-bg-color w-100 text-center">NOW PLAYING</h5>
         </div>
     </div>
     <div class="container">
         <div class="col-6">
-            <h4 id="artist" class="text-white"></h4>
-            <h5 id="track" class="text-white mt-n1"></h5>
+            <h4 id="artist" class="text-white mt-n1"></h4>
+            <h5 id="track" class="text-white mt-n2 mb-n1 font-weight-light"></h5>
+            <h5 id="remix" class="text-white mt-n1 font-weight-light"></h5>
+            <h5 id="label" class="text-white mt-n2 font-italic font-weight-light"></h5>
         </div>
     </div>
 
 
 </body></html>
+
+
