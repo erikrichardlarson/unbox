@@ -1,6 +1,6 @@
-# unbox - rekordbox / Serato / Traktor / VirtualDJ "Now Playing" overlays for Twitch / OBS
+# unbox - rekordbox / Serato / Traktor / VirtualDJ / Denon "Now Playing" overlays for Twitch / OBS
 
-Display your current or recent rekordbox / serato / traktor / virtualdj tracks to your viewers on Twitch. Inspired by PRACT OBS and ASOT.
+Display your current or recent rekordbox / serato / traktor / virtualdj / denon tracks to your viewers on Twitch. Inspired by PRACT OBS and ASOT.
 <p align="center">
  <img src="https://cdn.discordapp.com/attachments/780172543771410452/783904760880562176/Screen_Shot_2020-12-02_at_7.56.55_PM.png" />
 </p>
@@ -19,13 +19,15 @@ If unbox is useful to you and you'd like to support future development, please f
 </p>
 
 ## How to use
-1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/7.0/unbox-mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/7.0/unbox-windows.zip) Currently there is support for rekordbox 5 / 6, Traktor, Serato, and VirtualDJ. 
+1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/8.0/unbox-mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/8.0/unbox-windows.zip) Currently there is support for rekordbox 5 / 6, Traktor, Serato, and VirtualDJ. 
 
 **Extra step for Traktor users only: If you're on Traktor, you also need to download this [D2 file](https://github.com/erikrichardlarson/unbox/releases/download/7.0/D2.zip), unzip and just place it in your CSI folder located at C:\Program Files\Native Instruments\Traktor Pro 3\Resources64\qml\CSI on Windows or /Applications/Native Instruments/Traktor Pro 3/Traktor.app/Contents/Resources/qml/CSI on Mac. There is a D2 folder already in this CSI directory so it's best to make a backup of that. And if you don't own a Kontrol D2, go to Controller Manager in your preferences, click Add beneath the device dropdown, and add Traktor then select Kontrol D2. I would automate this for you but permissioning makes it tricky, sorry Traktor users.**
 
+**Denon users: Please make sure your player is online before selecting the Denon mode.**
+
 2. **Open the unbox zip file you downloaded above, and open the unbox app, on Windows you'll want to click the unbox.exe file. When it's open just select your mode. If you select real-time rekordbox on Windows another launcher will come up, select the version of rekordbox you're on in the dropdown and click launch, please leave all other settings intact.** If Windows or Mac asks you to trust unbox, you'll need to do that. The source code is in this repo if you're concerned about security. When the app is open you'll see this window:  
 <p align="center">
-<img src="https://media.discordapp.net/attachments/790269915444805656/817213109813903370/Screen_Shot_2021-03-04_at_5.32.08_PM.png" data-canonical-src="https://media.discordapp.net/attachments/790269915444805656/817213109813903370/Screen_Shot_2021-03-04_at_5.32.08_PM.png" />
+<img src="https://media.discordapp.net/attachments/790269915444805656/818679548815474708/Screen_Shot_2021-03-08_at_6.59.52_PM.png?width=876&height=614" data-canonical-src="https://media.discordapp.net/attachments/790269915444805656/818679548815474708/Screen_Shot_2021-03-08_at_6.59.52_PM.png?width=876&height=614" />
 </p>
 
 3. **Just keep unbox open when you're playing.** Now that unbox is open, you have access to a few things:  
