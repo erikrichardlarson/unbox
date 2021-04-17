@@ -48,7 +48,8 @@ If unbox is useful to you and you'd like to support future development, please f
 
 You can customize the text by adding CSS into the browser source in OBS. One usecase would be to add a shadow. This can be usefull in bright or chaning background lighting.
 You can use [CSS Shadow generator](https://html-css-js.com/css/generator/text-shadow/) to help you find the right CSS code. Then just **add** the lines into the existing browser source Custom CSS body. Don't override the pre-existing CSS.
+
 <p align="center">
- <img src="https://raw.githubusercontent.com/lord-carlos/unbox/customize/images/shadow.jpg" />
+ <img src="images/shadow.jpg?raw=true" />
 </p>
 
