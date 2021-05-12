@@ -30,7 +30,7 @@ If unbox is useful to you and you'd like to support future development, please f
 
 2. **Open the unbox zip file you downloaded above, and open the unbox app, on Windows you'll want to click the unbox.exe file. When it's open just select your mode. If you select real-time rekordbox on Windows another launcher will come up, select the version of rekordbox you're on in the dropdown and click launch, please leave all other settings intact.** If Windows or Mac asks you to trust unbox, you'll need to do that. The source code is in this repo if you're concerned about security. When the app is open you'll see this window:  
 <p align="center">
-<img src="https://media.discordapp.net/attachments/790269915444805656/818679548815474708/Screen_Shot_2021-03-08_at_6.59.52_PM.png?width=876&height=614" data-canonical-src="https://media.discordapp.net/attachments/790269915444805656/818679548815474708/Screen_Shot_2021-03-08_at_6.59.52_PM.png?width=876&height=614" />
+<img src="https://media.discordapp.net/attachments/790269915444805656/842113372522676274/Screen_Shot_2021-05-12_at_11.57.24_AM.png?width=614&height=614" data-canonical-src="https://media.discordapp.net/attachments/790269915444805656/842113372522676274/Screen_Shot_2021-05-12_at_11.57.24_AM.png?width=614&height=614" />
 </p>
 
 3. **Just keep unbox open when you're playing.** Now that unbox is open, you have access to a few things:  
