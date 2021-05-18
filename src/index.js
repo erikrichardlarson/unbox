@@ -179,6 +179,7 @@ class PlayHistory {
     this.homeFolder = process.env.APPDATA || (process.platform == 'darwin' ? process.env.HOME + '/Library/Application Support' : process.env.HOME + "/.local/share");
     this.optionsPath = process.platform != 'darwin' ? this.homeFolder + '\\Pioneer\\rekordboxAgent\\storage\\options.json' : this.homeFolder + '/Pioneer/rekordboxAgent/storage/options.json';
     this.outputPath = process.platform != 'darwin' ? require('os').homedir() + '\\unbox_output' : require('os').homedir() + '/unbox_output';
+    this.mixxxDatabasePath = process.platform != 'darwin' ? process.env.HOME + '\\AppData\\Local\\Mixxx\\mixxxdb.sqlite' : this.homeFolder + '/Mixxx';
 
     this.streamTxtPath = process.env.APPDATA ? this.outputPath + '\\rekordbox_stream.txt' : this.outputPath + '/rekordbox_stream.txt';
     this.streamJSONPath = process.env.APPDATA ? this.outputPath + '\\rekordbox_stream.json' : this.outputPath + '/rekordbox_stream.json';
@@ -422,6 +423,47 @@ class PlayHistory {
           })
         }
       })
+    }
+    else if (_this.mode == 'mixxx') {
+      let db = new sqlite3.Database(_this.mixxxDatabasePath)
+      db.serialize(function () {
+        db.each(`
+          select
+            li.artist, li.title, li.bpm, pt.pl_datetime_added
+          from PlaylistTracks pt
+          left join library li on li.id = pt.track_id
+          order by pt.pl_datetime_added desc
+          limit 1
+        `, function (err, row) {
+          var artist = row.artist;
+          var track = row.title;
+          _this.trackTimestamp = Math.floor(Date.parse(row.pl_datetime_added + " GMT") / 1000);
+
+          if ((_this.startTimeStamp) && (_this.startTimeStamp > _this.trackTimestamp)) {
+            fs.writeFileSync(_this.streamTxtPath, '');
+            fs.writeFileSync(_this.streamJSONPath, JSON.stringify({ artist: '', track: '' , remix: '', label: ''}));
+            fs.writeFileSync(_this.historyJSONPath, JSON.stringify({ tracks: [{ artist: '', track: '' , remix: '', label: ''}, { artist: '', track: '' , remix: '', label: ''}, { artist: '', track: '' , remix: '', label: ''}] }));
+            _this.playlistHistory = [{ artist: '', track: '' , remix: '', label: ''}, { artist: '', track: '' , remix: '', label: ''}, { artist: '', track: '' , remix: '', label: ''}];
+          }
+          if ((track.toUpperCase() != _this.mostrecentTrack) && (!_this.startTimeStamp || (_this.startTimeStamp < _this.trackTimestamp))) {
+            _this.mostRecentArtist = artist.toUpperCase();
+            _this.mostrecentTrack = track.toUpperCase();
+            fs.access(_this.historyJSONPath, function (error) {
+              if (error) {
+                fs.writeFileSync(_this.historyJSONPath, JSON.stringify({ tracks: [{ artist: _this.mostRecentArtist, track: _this.mostrecentTrack }] }));
+              }
+              else {
+                let history = JSON.parse(fs.readFileSync(_this.historyJSONPath))['tracks'];
+                if ((history) && (history.length == 3)) {
+                  history.pop()
+                }
+                _this.playlistHistory = [{ artist: artist.toUpperCase(), track: track.toUpperCase() }].concat(history);
+              }
+            })
+          }
+        })
+      })
+      db.close();
     }
     else if (_this.mode == 'rekordbox') {
       let db_path = JSON.parse(fs.readFileSync(_this.optionsPath))['options'][0][1];

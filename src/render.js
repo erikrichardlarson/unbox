@@ -32,6 +32,12 @@ checkboxes.forEach(function (checkbox) {
             document.getElementById('kuvo_url').style['display'] = 'None';
         }
 
+        if (mode[0] == 'mixxx') {
+            document.getElementById('header').innerHTML = `<h6>You're now logging your Mixxx history</h6>
+            <h6 id="headerHands"></h6>`;
+            document.getElementById('kuvo_url').style['display'] = 'None';
+        }
+
         document.getElementById('headerHands').innerText = '🙌';
 
     })
