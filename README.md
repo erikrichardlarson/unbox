@@ -1,6 +1,6 @@
 # unbox - rekordbox / Serato / Traktor / VirtualDJ / Denon / Mixxx "Now Playing" overlays for Twitch / OBS
 
-Display your current or recent rekordbox / serato / traktor / virtualdj / denon, mixxx tracks to your viewers on Twitch. Inspired by PRACT OBS and ASOT.
+Display your current or recent rekordbox / serato / traktor / virtualdj / denon / mixxx tracks to your viewers on Twitch. Inspired by PRACT OBS and ASOT.
 <p align="center">
  <img src="https://cdn.discordapp.com/attachments/780172543771410452/783904760880562176/Screen_Shot_2020-12-02_at_7.56.55_PM.png" />
 </p>
