@@ -1,8 +1,12 @@
-# unbox - rekordbox / Serato / Traktor / VirtualDJ / Denon / Mixxx "Now Playing" overlays for Twitch / OBS
+<h1 align="center">unbox</h1>
 
-Display your current or recent rekordbox / serato / traktor / virtualdj / denon / mixxx tracks to your viewers on Twitch. Inspired by PRACT OBS and ASOT.
+<h3 align="center">
+ Display your current or recent tracks to your viewers on Twitch, integrates with OBS and the <a href="https://dashboard.twitch.tv/extensions/8zta7n4h8nuf47x2leo161amjvq44d-0.0.8">ID?</a> Twitch extension <br>
+ <h3 align="center">Supported Platforms<br>rekordbox | Serato | Traktor | Denon | VirtualDJ | Mixxx</b></h3>
+</h3>
 <p align="center">
- <img src="https://cdn.discordapp.com/attachments/780172543771410452/783904760880562176/Screen_Shot_2020-12-02_at_7.56.55_PM.png" />
+ <img width="352" alt="Screen Shot 2021-07-03 at 12 43 29 PM" src="https://user-images.githubusercontent.com/17460309/124365356-47eeb580-dbfc-11eb-950f-8b73fb03e7dd.png">
+ <img src="https://media.discordapp.net/attachments/790269915444805656/802319468609011712/Screen_Shot_2021-01-22_at_3.30.39_PM.png" />
 </p>
 
 **Please back up your library before using this as corruption could occur, we're not responsible for any issues, or corruption that this software may cause to your library.**
@@ -24,7 +28,7 @@ If unbox is useful to you and you'd like to support future development, please f
 </p>
 
 ## How to use
-1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/8.3/unbox-mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/8.4/unbox-windows.zip) Currently there is support for rekordbox 5 / 6, Traktor, Serato, and VirtualDJ. 
+1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/9.0/unbox_mac.dmg) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/9.0/unbox_windows.zip) 
 
 **Extra step for Traktor users only: If you're on Traktor, you also need to download this [D2 file](https://github.com/erikrichardlarson/unbox/releases/download/7.0/D2.zip), unzip and just place it in your CSI folder located at C:\Program Files\Native Instruments\Traktor Pro 3\Resources64\qml\CSI on Windows or /Applications/Native Instruments/Traktor Pro 3/Traktor.app/Contents/Resources/qml/CSI on Mac. There is a D2 folder already in this CSI directory so it's best to make a backup of that. And if you don't own a Kontrol D2, go to Controller Manager in your preferences, click Add beneath the device dropdown, and add Traktor then select Kontrol D2. I would automate this for you but permissioning makes it tricky, sorry Traktor users.**
 
@@ -37,15 +41,15 @@ If unbox is useful to you and you'd like to support future development, please f
 
 3. **Just keep unbox open when you're playing.** Now that unbox is open, you have access to a few things:  
 
-*  Browser sources. The browser sources are just web pages that unbox automatically updates when it's open. The dropdown on the second step of the app gives you all available sources, on the third step of the app you can copy the link to your clipboard. For example you can add: http://localhost:8080/history.html or http://localhost:8080/asot.html. Below you can see what these browser sources look like. If rekordbox / Serato / Traktor is on a different computer than you're streaming OBS on, you can grab the IP address of the computer running unbox / rekordbox / Serato / Traktor and use that in place of localhost for your browser source urls. You'll need to have both machines on the same network to make this work. The now playing overlay could look something like this: http://192.168.0.1:8080/asot.html
+*  Browser sources. The browser sources are just web pages that unbox automatically updates when it's open. The dropdown on the second step of the app gives you all available sources, on the third step of the app you can copy the link to your clipboard. For example you can add http://localhost:8080/asot.html. Below you can see what these browser sources look like. If your DJ software is running on a different computer than you're streaming OBS on, you can grab the IP address of the computer running unbox / your DJ software and use that in place of localhost for your browser source urls. You'll need to have both machines on the same network to make this work. The now playing overlay could look something like this: http://192.168.0.1:8080/asot.html
  
-*  Three txt files. You also have access to a "rekordbox_stream.txt" file in your home directory in a folder called unbox_output. You can add this as a text source in OBS, it updates in real time so you can display a plain text view of the current playing track. The other two files are artist.txt and track.txt which are just the artist and track separated. 
+*  Three txt files. You also have access to a "unbox.txt" file in your home directory in a folder called unbox_output. You can add this as a text source in OBS, it updates in real time so you can display a plain text view of the current playing track. The other two files are artist.txt and track.txt which are just the artist and track separated. 
 
 *  To use KUVO live playlists. Just paste in your user id, click get playlist, and we'll find your latest playlist.
 
-<p align="center">
- <img src="https://media.discordapp.net/attachments/790269915444805656/802319468609011712/Screen_Shot_2021-01-22_at_3.30.39_PM.png" />
-</p>
+4. **Integrate with Twitch Panel Extension**
+
+* To integrate with the Twitch panel extension you'll need to subscribe to Unbox Pro, this can be done in step four in the Unbox app. Once subscribed you'll get a unique token on each login to Unbox, you can enter this token into the configuration page of the Twitch extension and your tracks will now automatically appear in the Panel Extension. Up to 20 tracks will be displayed to your viewers, and remain there after you close Unbox. This way if your viewers show up late to your set, or miss your set they can still see what you've played. 
 
 ### Customize
 
