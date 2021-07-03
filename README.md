@@ -1,8 +1,7 @@
 <h1 align="center">unbox</h1>
 
 <h3 align="center">
- Display your current or recent tracks to your viewers on Twitch, integrates with OBS and the <a href="https://dashboard.twitch.tv/extensions/8zta7n4h8nuf47x2leo161amjvq44d-0.0.8">ID?</a> Twitch extension <br>
- <h3 align="center">Supported Platforms<br>rekordbox | Serato | Traktor | Denon | VirtualDJ | Mixxx</b></h3>
+ Display your rekordbox | Serato | Traktor | Denon | VirtualDJ | Mixxx tracks to your viewers on Twitch<br><br>Integrates with OBS and the <a href="https://dashboard.twitch.tv/extensions/8zta7n4h8nuf47x2leo161amjvq44d-0.0.8">ID?</a> Twitch extension <br>
 </h3>
 <p align="center">
  <img width="352" alt="Screen Shot 2021-07-03 at 12 43 29 PM" src="https://user-images.githubusercontent.com/17460309/124365356-47eeb580-dbfc-11eb-950f-8b73fb03e7dd.png">
