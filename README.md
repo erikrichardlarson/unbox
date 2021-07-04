@@ -27,7 +27,7 @@ If unbox is useful to you and you'd like to support future development, please f
 </p>
 
 ## How to use
-1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/8.3/unbox-mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/9.0/unbox_windows.zip) 
+1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/9.0/unbox_mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/9.0/unbox_windows.zip) 
 
 **Extra step for Traktor users only: If you're on Traktor, you also need to download this [D2 file](https://github.com/erikrichardlarson/unbox/releases/download/7.0/D2.zip), unzip and just place it in your CSI folder located at C:\Program Files\Native Instruments\Traktor Pro 3\Resources64\qml\CSI on Windows or /Applications/Native Instruments/Traktor Pro 3/Traktor.app/Contents/Resources/qml/CSI on Mac. There is a D2 folder already in this CSI directory so it's best to make a backup of that. And if you don't own a Kontrol D2, go to Controller Manager in your preferences, click Add beneath the device dropdown, and add Traktor then select Kontrol D2. I would automate this for you but permissioning makes it tricky, sorry Traktor users.**
 
