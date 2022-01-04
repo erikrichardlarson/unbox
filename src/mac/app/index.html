@@ -1,0 +1,971 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="unbox" />
+
+  <link rel="stylesheet" href="./assets/css/libs.bundle.css" />
+
+  <link rel="stylesheet" href="./assets/css/theme.bundle.css" />
+
+  <title>Unbox</title>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+    integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="https://sdk.userbase.com/2/userbase.js"></script>
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+
+    function openNewDatabase() {
+      userbase.openDatabase({
+        databaseName: 'tracklist',
+        changeHandler: function (items) {
+          var i;
+          var trackCount = 0;
+          for (i = items.length - 1; i > -1; i--) {
+            if (trackCount >= 20) {
+              userbase.deleteItem({
+                databaseName: 'tracklist',
+                itemId: items[i].itemId
+              }).then(() => {
+              }).catch((e) => console.error(e))
+            }
+            trackCount++;
+          }
+        }
+      }).then(() => {
+        userbase.shareDatabase({
+          databaseName: 'tracklist',
+          readOnly: true
+        }).then((token) => {
+          document.getElementById('pricing').style.display = 'none';
+          document.getElementById('sign-up').style.display = 'none';
+          document.getElementById('sign-in').style.display = 'none';
+          document.getElementById('extension-link').style.display = 'block';
+          document.getElementById('db-token').value = token['shareToken'];
+          document.getElementById('cancel-button').style.display = '';
+          document.getElementById('sub-status').innerText = 'You are subscribed to Unbox Pro';
+          document.getElementById('sub-button').style.display = 'none';
+          config['db-token'] = token['shareToken'];
+          ipcRenderer.send('config-update', config);
+
+        }).catch((e) => console.error(e))
+
+      }).catch((e) => console.error(e))
+
+    }
+
+    userbase.init({ appId: '' })
+      .then((session) => {
+        if ((session.user) && (session.user.subscriptionStatus == 'active')) {
+          openNewDatabase()
+          document.getElementById('pricing').style.display = 'none';
+          document.getElementById('sign-up').style.display = 'none';
+          document.getElementById('db-token').value = config['db-token'];
+          document.getElementById('extension-link').style.display = 'block';
+          document.getElementById('cancel-button').style.display = '';
+          document.getElementById('sub-status').innerText = 'You are subscribed to Unbox Pro';
+          document.getElementById('sub-button').style.display = 'none';
+          document.getElementById('logout-button').style.display = '';
+        }
+        else if (session.user) {
+          document.getElementById('pricing').style.display = 'none';
+          document.getElementById('sign-up').style.display = 'none';
+          document.getElementById('extension-link').style.display = 'block';
+          document.getElementById('token-text').style.display = 'none';
+          document.getElementById('cancel-button').style.display = 'none';
+          document.getElementById('token-settings').style.display = 'none';
+          document.getElementById('logout-button').style.display = '';
+        }
+      })
+      .catch(() => { })
+      .finally(() => { })
+
+    const { ipcRenderer } = require('electron')
+
+    var config = {
+      "mode": null,
+      "A": true,
+      "B": true,
+      "C": true,
+      "D": true,
+      "overlay": "Now Playing Vertical",
+      "background-color": '#fffff',
+      "text-color": '#00000',
+      "kuvo-userid": null,
+      "serato-userid": null,
+      "delay": 0
+    };
+
+    ipcRenderer.on('track-update', (event, arg) => {
+      document.getElementById('last-logged-track').innerText = arg;
+      document.getElementById('live-status').className = "spinner-grow text-success";
+    })
+
+    ipcRenderer.on('db-update', (event, arg) => {
+
+      let artist = arg.artist;
+      let track = arg.track;
+
+      userbase.insertItem({
+        databaseName: 'tracklist',
+        item: {
+          artist: artist,
+          track: track
+        }
+      }).then(() => {
+      }).catch((e) => console.error(e))
+    })
+
+    ipcRenderer.on('username-update', (event, arg) => {
+      document.getElementById('username').innerText = arg;
+      document.getElementById('username-link').href = "https://twitch.tv/" + arg;
+    })
+
+
+    function updateTextInput(val) {
+      document.getElementById('textInput').innerText = val + ' second delay';
+      config['delay'] = +val;
+      ipcRenderer.send('config-update', config)
+    }
+
+    ipcRenderer.on('config', (event, arg) => {
+
+      config = { ...config, ...arg }
+
+      document.getElementById('network').value = config['ip'] + ":8080/" + config['overlay'].split(' ').join('_').toLowerCase() + '.html';
+      document.getElementById('local').value = 'http://localhost:8080/' + config['overlay'].split(' ').join('_').toLowerCase() + '.html';
+
+      document.getElementById('overlay-layout').value = config['overlay'];
+      document.getElementById('textInput').innerText = config['delay'] + ' second delay';
+      document.getElementById('delayRange').value = config['delay'];
+
+      ipcRenderer.send('update-background-color', config['background-color'])
+      ipcRenderer.send('update-text-color', config['text-color'])
+
+      document.getElementById('text-color').value = config['text-color'];
+      document.getElementById('background-color').value = config['background-color'];
+
+      document.getElementById(config['mode']).click();
+
+      if (config['mode'] == 'kuvo') {
+        document.getElementById('kuvo-userid').value = config['kuvo-userid'];
+      }
+
+      if (config['mode'] == 'serato_live') {
+        document.getElementById('serato-userid').value = config['serato-userid'];
+      }
+
+      if (config['mode'] == 'traktor') {
+        let decks = ['A', 'B', 'C', 'D'];
+        var i;
+        for (i = 0; i < decks.length; i++) {
+          let deck = decks[i];
+          let value = { [deck]: config[deck] }
+          ipcRenderer.send('update-traktor-decks', value);
+          if (!config[deck]) {
+            document.getElementById(deck).className = "badge bg-danger-soft";
+          }
+          else {
+            document.getElementById(deck).className = "badge bg-success-soft";
+          }
+        }
+      }
+    })
+
+    function getKUVOPlaylist() {
+      document.getElementById('kuvo-loader').style.display = "";
+      ipcRenderer.send('get-kuvo-playlist', document.getElementById('kuvo-userid').value)
+      ipcRenderer.on('update-kuvo-url', (event, arg) => {
+        document.getElementById('kuvo-loader').style.display = "none";
+        document.getElementById('kuvo-playlist-url').innerText = arg;
+      })
+    }
+
+    function getSeratoPlaylist() {
+      document.getElementById('serato-loader').style.display = "";
+      ipcRenderer.send('get-serato-playlist', document.getElementById('serato-userid').value)
+      ipcRenderer.on('update-serato-url', (event, arg) => {
+        document.getElementById('serato-loader').style.display = "none";
+        document.getElementById('serato-playlist-url').innerText = arg;
+      })
+    }
+
+    function changeBackgroundColor(value) {
+      config['background-color'] = value;
+      ipcRenderer.send('update-background-color', value)
+      ipcRenderer.send('config-update', config)
+    }
+
+    function changeTextColor(value) {
+      config['text-color'] = value;
+      ipcRenderer.send('update-text-color', value)
+      ipcRenderer.send('config-update', config)
+    }
+
+    function copyRemote() {
+      var input = document.querySelector('#network');
+      input.setSelectionRange(0, input.value.length + 1);
+      input.select();
+      try {
+        document.execCommand("copy");
+      } catch (err) {
+      }
+    }
+
+    function copyToken() {
+      var input = document.querySelector('#db-token');
+      input.setSelectionRange(0, input.value.length + 1);
+      input.select();
+      try {
+        document.execCommand("copy");
+      } catch (err) {
+      }
+    }
+
+
+    function copyLocal() {
+      var input = document.querySelector('#local');
+      input.setSelectionRange(0, input.value.length + 1);
+      input.select();
+      try {
+        document.execCommand("copy");
+      } catch (err) {
+      }
+    }
+
+    function signOut() {
+      userbase.signOut().then(() => {
+
+        document.getElementById('extension-link').style.display = 'none';
+        document.getElementById('sign-in').style.display = 'block';
+        document.getElementById('cancel-button').style.display = 'none';
+        document.getElementById('logout-button').style.display = 'none';
+
+      }).catch((e) => console.error(e))
+    }
+
+    function showSignin() {
+
+      document.getElementById('sign-up').style.display = 'none';
+      document.getElementById('pricing').style.display = 'none';
+      document.getElementById('sign-in').style.display = 'block';
+
+    }
+
+    function showSignup() {
+
+      document.getElementById('sign-up').style.display = '';
+      document.getElementById('pricing').style.display = '';
+      document.getElementById('sign-in').style.display = 'none';
+
+    }
+
+    window.addEventListener('load', function () {
+
+      function purchaseSubscription() {
+
+        document.getElementById('logout-button').style.display = '';
+        document.getElementById('sub-button').style.display = 'none';
+        document.getElementById('sub-status').innerText = 'Please log out and log back in to confirm your new subsciption';
+
+        userbase.purchaseSubscription({
+          successUrl: 'https://github.com/erikrichardlarson/unbox',
+          cancelUrl: 'https://github.com/erikrichardlarson/unbox',
+          priceId: 'price_1IW922A3OaUfbwuDr23QICOP'
+        }).then(() => {
+
+        }).catch((e) => console.error(e))
+      }
+
+      function cancelSub() {
+        userbase.cancelSubscription().then((result) => {
+          document.getElementById('sub-status').innerText = 'Subscription will be cancelled on ' + result.cancelSubscriptionAt.split('T')[0];
+        }).catch((e) => console.error(e))
+      }
+
+
+      document.getElementById('sub-button').addEventListener('click', purchaseSubscription)
+      document.getElementById('logout-button').addEventListener('click', signOut)
+      document.getElementById('cancel-button').addEventListener('click', cancelSub)
+
+      function handleSignUp(e) {
+        e.preventDefault()
+
+        const username = document.getElementById('signup-username').value
+        const password = document.getElementById('signup-password').value
+
+        document.getElementById('login-spinner').style.display = '';
+        document.getElementById('signup-error').innerHTML = '';
+
+        userbase.signUp({ username, password, rememberMe: 'local' })
+          .then((user) => {
+            document.getElementById('pricing').style.display = 'none';
+            document.getElementById('sign-up').style.display = 'none';
+            document.getElementById('signup-form').style.display = '';
+            document.getElementById('login-spinner').style.display = 'none';
+            document.getElementById('extension-link').style.display = 'block';
+            document.getElementById('token-text').style.display = 'none';
+            document.getElementById('cancel-button').style.display = 'none';
+            document.getElementById('token-settings').style.display = 'none';
+            document.getElementById('logout-button').style.display = '';
+            document.getElementById('sub-button').style.display = '';
+            document.getElementById('sub-status').innerText = 'You are not subscribed, please subscribe to access Unbox Pro';
+          })
+          .catch((e) => {
+            document.getElementById('signup-error').style = 'color: red;'
+            document.getElementById('signup-error').innerHTML = e
+            document.getElementById('login-spinner').style.display = 'none';
+          })
+      }
+
+      function handleSignIn(e) {
+
+
+        e.preventDefault()
+
+        const username = document.getElementById('signin-username').value
+        const password = document.getElementById('signin-password').value
+
+        document.getElementById('signin-spinner').style.display = '';
+
+        userbase.signIn({ username, password, rememberMe: 'local' })
+
+          .then((user) => {
+
+            document.getElementById('signin-spinner').style.display = 'none';
+            document.getElementById('signin-error').innerHTML = '';
+
+            if ((user) && (user.subscriptionStatus == 'active')) {
+              openNewDatabase()
+              document.getElementById('pricing').style.display = 'none';
+              document.getElementById('sign-in').style.display = 'none';
+              document.getElementById('db-token').value = config['db-token'];
+              document.getElementById('extension-link').style.display = 'block';
+              document.getElementById('token-text').style.display = '';
+              document.getElementById('token-settings').style.display = '';
+              document.getElementById('cancel-button').style.display = '';
+              document.getElementById('sub-status').innerText = 'You are subscribed to Unbox Pro';
+              document.getElementById('sub-button').style.display = 'none';
+              document.getElementById('logout-button').style.display = '';
+            }
+            else if (user) {
+              document.getElementById('pricing').style.display = 'none';
+              document.getElementById('sign-in').style.display = 'none';
+              document.getElementById('extension-link').style.display = 'block';
+              document.getElementById('token-text').style.display = 'none';
+              document.getElementById('cancel-button').style.display = 'none';
+              document.getElementById('sub-button').style.display = '';
+              document.getElementById('logout-button').style.display = '';
+              document.getElementById('sub-status').innerText = 'You are not subscribed, please subscribe to access Unbox Pro';
+              document.getElementById('token-settings').style.display = 'none';
+            }
+          }
+
+          )
+          .catch((e) => {
+            document.getElementById('signin-error').innerHTML = e
+            document.getElementById('signin-error').style = 'color: red;'
+            document.getElementById('signin-spinner').style.display = 'none';
+          })
+      }
+
+      document.getElementById('signup-form').addEventListener('click', handleSignUp)
+
+      document.getElementById('signin-form').addEventListener('click', handleSignIn)
+
+      var select = document.getElementById('overlay-layout');
+
+      function updateOverlay() {
+        config['overlay'] = this.value;
+        document.getElementById('network').value = config['ip'] + ":8080/" + config['overlay'].split(' ').join('_').toLowerCase() + '.html';
+        document.getElementById('local').value = 'http://localhost:8080/' + config['overlay'].split(' ').join('_').toLowerCase() + '.html';
+        ipcRenderer.send('config-update', config)
+      }
+
+      select.addEventListener('change', updateOverlay, false);
+
+      function updateKUVOUserID() {
+        config['kuvo-userid'] = this.value;
+        ipcRenderer.send('config-update', config)
+      }
+
+      function updateSeratoUserID() {
+        config['serato-userid'] = this.value;
+        ipcRenderer.send('config-update', config)
+      }
+
+      document.getElementById('serato-userid').addEventListener('change', updateSeratoUserID, false);
+
+      document.getElementById('kuvo-userid').addEventListener('change', updateKUVOUserID, false);
+
+      var checkboxes = document.querySelectorAll("input[type=checkbox][id=rekordbox-real-time]");
+      var mode = []
+
+      checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+          mode =
+            Array.from(checkboxes)
+              .filter(i => i.checked)
+              .map(i => i.id)
+          config['rekordbox-real-time'] = !mode[0] ? false : true;
+        })
+      })
+
+      ipcRenderer.on('update-text-color', (event, arg) => {
+        fs.writeFileSync(path.join(this.outputPath, 'text-color.json'), JSON.stringify({ color: arg }));
+      })
+
+      function toggleDecks(deck) {
+
+        config[deck] = !config[deck];
+        ipcRenderer.send('config-update', config)
+        let value = { [deck]: config[deck] }
+        ipcRenderer.send('update-traktor-decks', value);
+
+        if (!config[deck]) {
+          document.getElementById(deck).className = "badge bg-danger-soft";
+        }
+        else {
+          document.getElementById(deck).className = "badge bg-success-soft";
+        }
+
+      }
+
+    })
+
+    function toggleOptions(mode) {
+
+        ipcRenderer.send('switch-mode', mode)
+        config['mode'] = mode;
+        ipcRenderer.send('config-update', config)
+      
+        if (mode == 'kuvo') {
+          document.getElementById('rekordbox-options').style.display = "block";
+        }
+        else {
+          document.getElementById('rekordbox-options').style.display = "none";
+        }
+        if (mode == 'traktor') {
+          document.getElementById('traktor-options').style.display = "block";
+        }
+        else {
+          document.getElementById('traktor-options').style.display = "none";
+        }
+
+        if (mode == 'serato_live') {
+          document.getElementById('serato-live-options').style.display = "block";
+        }
+        else {
+          document.getElementById('serato-live-options').style.display = "none";
+        }
+
+
+    }
+
+
+  </script>
+</head>
+
+<body>
+
+  <div class="main-content">
+
+    <div class="container-lg">
+      <div class="header row">
+        <a id="username-link" href="" target="_blank">
+          <h3 class="header-title pt-4 offset-md-10" id="username"></h3>
+        </a>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8">
+
+          <form class="tab-content py-6" id="wizardSteps">
+            <div class="tab-pane fade show active" id="wizardStepOne" role="tabpanel" aria-labelledby="wizardTabOne">
+
+              <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
+                  <h1 class="mb-4">
+                    unbox
+                  </h1>
+
+                  <h6 class="mb-4 text-uppercase text-muted">
+                    Step 1 of 4
+                  </h6>
+
+                  <h1 class="mb-5">
+                    Select your mode
+                  </h1>
+
+                </div>
+              </div>
+
+              <div class="form-group text-center">
+                <div class="btn-group-toggle">
+                  <input type="radio" class="btn-check" name="options" id="rekordbox" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <label class="btn btn-white" for="rekordbox">
+                    Rekordbox
+                  </label>
+                  <input type="radio" class="btn-check" name="options" id="rekordbox-real-time" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <!-- <label class="btn btn-white" for="rekordbox-real-time">
+                    Rekordbox Real-Time
+                  </label> -->
+                  <input type="radio" class="btn-check" name="options" id="kuvo" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <label class="btn btn-white" for="kuvo">
+                    KUVO
+                  </label>
+                  <input type="radio" class="btn-check" name="options" id="serato_live" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <label class="btn btn-white" for="serato_live">
+                    Serato Live
+                  </label>
+                  <input type="radio" class="btn-check" name="options" id="serato" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <label class="btn btn-white" for="serato">
+                    Serato
+                  </label>
+                  <br><br>
+
+                  <input type="radio" class="btn-check" name="options" id="denon" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <label class="btn btn-white" for="denon">
+                    Denon
+                  </label>
+                  <input type="radio" class="btn-check" name="options" id="traktor" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <label class="btn btn-white" for="traktor">
+                    Traktor
+                  </label>
+                  <input type="radio" class="btn-check" name="options" id="virtualdj" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <label class="btn btn-white" for="virtualdj">
+                    Virtual DJ
+                  </label>
+                  <input type="radio" class="btn-check" name="options" id="mixxx" autocomplete="off"
+                    onclick="toggleOptions(this.id)">
+                  <label class="btn btn-white" for="mixxx">
+                    Mixxx
+                  </label>
+                </div>
+              </div>
+
+              <div id="rekordbox-options" style="display: none;">
+
+                <div class="form-floating form-group col-6 offset-3 text-center justify-content-center">
+                  <input class="form-control" id="kuvo-userid" placeholder="">
+                  <label for="kuvo-userid">KUVO User ID</label>
+                  <button class="btn btn-lg btn-white mt-3" type="button" onclick="getKUVOPlaylist()">Get
+                    playlist</button>
+                  <p class="mt-4" id="kuvo-playlist-url"></p>
+                  <div class="spinner-grow text-success" id="kuvo-loader" role="status" style="display: none;">
+                  </div>
+                </div>
+              </div>
+
+              <div id="serato-live-options" style="display: none;">
+
+                <div class="form-floating form-group col-6 offset-3 text-center justify-content-center">
+                  <input class="form-control" id="serato-userid" placeholder="">
+                  <label for="serato-userid">Serato User ID</label>
+                  <button class="btn btn-lg btn-white mt-3" type="button" onclick="getSeratoPlaylist()">Get
+                    playlist</button>
+                  <p class="mt-4" id="serato-playlist-url"></p>
+                  <div class="spinner-grow text-success" id="serato-loader" role="status" style="display: none;">
+                  </div>
+                </div>
+              </div>
+
+              <div id="delay-options" style="display: none;">
+                <div class="form-floating form-group col-6 offset-3 text-center justify-content-center">
+                  <p id="textInput"></p>
+                  <input type="range" class="custom-range" min="0" max="120" step="1" id="delayRange"
+                    onchange="updateTextInput(this.value);">
+                </div>
+              </div>
+
+              <div id="traktor-options" class="form-group text-center" style="display: none; user-select: none;">
+                <p class="text-muted text-center">
+                  DECKS
+                </p>
+                <span id="A" class="badge bg-success-soft" style="cursor: pointer;"
+                  onclick="toggleDecks(this.id)">A</span>
+                <span id="B" class="badge bg-success-soft" style="cursor: pointer;"
+                  onclick="toggleDecks(this.id)">B</span>
+                <span id="C" class="badge bg-success-soft" style="cursor: pointer;"
+                  onclick="toggleDecks(this.id)">C</span>
+                <span id="D" class="badge bg-success-soft" style="cursor: pointer;"
+                  onclick="toggleDecks(this.id)">D</span>
+              </div>
+
+              <hr class="my-5">
+
+              <div class="nav row align-items-center">
+
+
+                <div class="offset-md-10">
+
+                  <a class="btn btn-lg btn-primary" data-toggle="wizard" href="#wizardStepTwo">Continue</a>
+
+                </div>
+              </div>
+
+            </div>
+            <div class="tab-pane fade" id="wizardStepTwo" role="tabpanel" aria-labelledby="wizardTabTwo">
+              <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
+                  <h1 class="mb-4">
+                    unbox
+                  </h1>
+                  <h6 class="mb-4 text-uppercase text-muted">
+                    Step 2 of 4
+                  </h6>
+
+                  <h1 class="mb-4">
+                    Design your overlay
+                  </h1>
+
+                </div>
+              </div>
+
+
+              <div class="form-group mx-8">
+
+                <label class="text-muted form-label mb-1">
+                  Overlay
+                </label>
+
+                <select id="overlay-layout" class="form-select mb-3" data-choices='{"searchEnabled": false, "choices": [
+                                                                  {
+                                                                    "value": "Now Playing Vertical",
+                                                                    "label": "Now Playing Vertical"
+                                                                  },
+                                                                  {
+                                                                    "value": "Now Playing Horizontal",
+                                                                    "label": "Now Playing Horizontal"
+                                                                  },
+                                                                  {
+                                                                    "value": "ASOT",
+                                                                    "label": "ASOT"
+                                                                  },
+                                                                  {
+                                                                    "value": "Next Up",
+                                                                    "label": "Next Up"
+                                                                  },
+                                                                  {
+                                                                    "value": "History",
+                                                                    "label": "History"
+                                                                  }
+                                                                ]}'></select>
+                <label class="text-muted form-label mb-2">
+                  Colors
+                </label>
+
+                <div class="row">
+                  <div class="col-md-3 ml-md-auto mx-md-2">
+                    <p>Background</p>
+                  </div>
+                  <div class="col-md-3 ml-md-auto"><input type="color" id="background-color"
+                      class="pt-1 w-25 h-50 form-control form-control-flush form-control-auto"
+                      onchange="changeBackgroundColor(this.value)">
+                  </div>
+                  <div class="col-md-3 ml-md-auto mx-md-n5">
+                    <p>Text</p>
+                  </div>
+                  <div class="col-md-3 ml-md-auto mx-md-n3"><input type="color" id="text-color"
+                      class="pt-1 w-25 h-50 form-control form-control-flush form-control-auto ml-n4"
+                      onchange="changeTextColor(this.value)"></div>
+                </div>
+
+              </div>
+
+
+              <hr class="my-5">
+
+              <div class="nav row align-items-center">
+                <div class="col-auto">
+
+                  <a class="btn btn-lg btn-white" data-toggle="wizard" href="#wizardStepOne">Back</a>
+
+                </div>
+                <div class="col text-center">
+
+
+                </div>
+                <div class="col-auto">
+
+                  <a class="btn btn-lg btn-primary" data-toggle="wizard" href="#wizardStepThree">Continue</a>
+
+                </div>
+              </div>
+
+            </div>
+            <div class="tab-pane fade" id="wizardStepThree" role="tabpanel" aria-labelledby="wizardTabThree">
+              <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
+                  <h1 class="mb-4">
+                    unbox
+                  </h1>
+                  <h6 class="mb-4 text-uppercase text-muted">
+                    Step 3 of 4
+                  </h6>
+                  <h1 class="mb-3">
+                    Go live
+                  </h1>
+                  <div id="live-status" class="spinner-grow" role="status">
+                  </div>
+                </div>
+              </div>
+
+              <div class="row px-7 pt-5">
+                <div class="input-group mb-3 px-7">
+                  <input id="local" type="text" class="form-control" placeholder="Local URL">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="copy-local"
+                      onclick="copyLocal()">Copy</button>
+                  </div>
+                </div>
+                <div class="input-group mb-3 px-7">
+                  <input id="network" type="text" class="form-control" placeholder="Remote URL">
+                  <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="button" id="copy-network"
+                      onclick="copyRemote()">Copy</button>
+                  </div>
+                </div>
+                <div class="form-group px-3 pt-5">
+                  <label class="text-muted form-label">
+                    Last logged track
+                  </label>
+                  <p id="last-logged-track">
+                  </p>
+                  <div class="row" style="--bs-gutter-x: none !important;">
+
+                  </div>
+                </div>
+              </div>
+              <hr class="mb-5">
+              <div class="nav row align-items-center">
+                <div class="col-auto">
+                  <a class="btn btn-lg btn-white" data-toggle="wizard" href="#wizardStepTwo">Back</a>
+                </div>
+                <div class="col text-center">
+                </div>
+                <div class="col-auto">
+
+                  <a class="btn btn-lg btn-primary" data-toggle="wizard" href="#wizardStepFour">Continue</a>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="tab-pane fade" id="wizardStepFour" role="tabpanel" aria-labelledby="wizardTabFour">
+              <div class="header row">
+                <h3 class="header-title offset-md-10 mb-n6"><button type="button" class="btn btn-primary"
+                    id="logout-button" style="display:none;">Logout</button></h3>
+              </div>
+              <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-8 col-xl-6 text-center">
+                  <h1 class="mb-4">
+                    unbox
+                  </h1>
+                  <div class="col-md-3 offset-md-3">
+
+                  </div>
+                  <h6 class="mb-4 text-uppercase text-muted">
+                    Step 4 of 4
+                  </h6>
+                  <h1 class="mb-3">
+                    Go Pro
+                  </h1>
+
+                </div>
+                <div class="row justify-content-center">
+                  <div id="pricing" class="col-4 col-lg-4">
+                    <div class="card card-fill">
+                      <div class="card-body">
+                        <h6 class="text-uppercase text-center text-muted my-4">
+                          Unbox Pro
+                        </h6>
+                        <div class="row g-0 align-items-center justify-content-center">
+
+                          <div class="col-auto">
+                            <div class="h2 mb-0">$</div>
+                          </div>
+                          <div class="col-auto">
+                            <div class="display-2 mb-0">9</div>
+                          </div>
+                        </div>
+                        <div class="h6 text-uppercase text-center text-muted mb-5">
+                          / month
+                        </div>
+                        <div class="mb-3">
+                          <ul class="list-group list-group-flush text-center">
+                            <li class="list-group-item align-items-center justify-content-between px-0">
+                              <small>Twitch Panel Extension</small> <i class="fe fe-check-circle text-success"></i>
+                            </li>
+                            <li class="list-group-item align-items-center justify-content-between px-0">
+                              <small>Real-time history</small> <i class="fe fe-check-circle text-success"></i>
+                            </li>
+                            <li class="list-group-item align-items-center justify-content-between px-0">
+                              <small>Embed tracklist anywhere</small> <i class="fe fe-check-circle text-success"></i>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="sign-up" class="col-6 col-md-6 col-xl-6 my-5">
+                    <h1 class="display-4 text-center mb-3">
+                      Sign up
+                    </h1>
+                    <p class="text-muted text-center mb-5">
+                      Display your tracklists in real-time
+                    </p>
+                    <form>
+                      <div class="form-group">
+                        <label class="form-label">
+                          Email
+                        </label>
+                        <input id="signup-username" type="email" class="form-control" placeholder="">
+                      </div>
+                      <div class="form-group">
+                        <div class="row">
+                          <div class="col">
+                            <label class="form-label">
+                              Password
+                            </label>
+                          </div>
+                        </div>
+                        <div class="input-group">
+                          <input id="signup-password" class="form-control" type="password" placeholder="">
+                        </div>
+                      </div>
+                      <button id="signup-form" class="btn btn-lg w-100 btn-primary mb-3" type="button">
+                        Sign Up
+                      </button>
+                      <div id="login-spinner" class="text-center" style="display:none">
+                        <div class="spinner-grow" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      </div>
+                      <div class="text-center" id="already-logged-text">
+                        <small class="text-muted text-center">
+                          Already have an account? <a href="" id="login-link" onclick="showSignin()">Log in</a>.
+                        </small>
+                      </div>
+                      <div id="signup-error"></div>
+                    </form>
+                  </div>
+                  <div id="extension-link" style="display: none">
+                    <div id="pro-settings" class="row px-7 pt-3">
+                      <div class="spinner-grow text-success" id="login-spinner" role="status" style="display: none;">
+                      </div>
+                      <div class="text-center">
+                        <label class="col-4 text-muted form-label">
+                          Subscription
+                        </label>
+                        <p id="sub-status">You are not subscribed, please subscribe to access Unbox Pro</p>
+                        <div id="cancel-alert" class="alert alert-danger alert-dismissible fade show" role="alert"
+                          style="display:none;">
+                          <p id="cancel-text"></p>
+
+                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+
+                        </div>
+                        <div class="toolbar">
+                          <button type="button" class="btn btn-success mb-2" id="sub-button">Subscribe</button>
+
+                        </div>
+                      </div>
+                      <div class="input-group mb-3 mt-2 px-7" id="token-text">
+                        <p class="text-center text-muted">Install and configure Unbox's Twitch Extension
+                          <a target="_blank"
+                            href="https://dashboard.twitch.tv/extensions/8zta7n4h8nuf47x2leo161amjvq44d-0.0.6">here</a>
+                          using the token below
+                        </p>
+                      </div>
+                      <div class="form-group px-3 pt-1" id="token-settings">
+                        <div class="row" style="--bs-gutter-x: none !important;">
+                          <label for="db-token" class="col-4 text-muted form-label">
+                            Twitch Extension token
+                          </label>
+                          <button class="col-2 offset-md-6 btn btn-outline-secondary mb-2" type="button" id="copy-token"
+                            onclick="copyToken()">Copy</button>
+                        </div>
+                        <textarea id="db-token" type="text" class="form-control" placeholder="Token"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="sign-in" class="col-6 col-md-6 col-xl-6 my-5 mx-auto" style="display:none;">
+                    <h1 class="display-4 text-center mb-3">
+                      Sign in
+                    </h1>
+                    <p class="text-muted text-center mb-5">
+                      Display your tracklists in real-time
+                    </p>
+                    <form>
+                      <div class="form-group">
+                        <label class="form-label">
+                          Email
+                        </label>
+                        <input id="signin-username" type="email" class="form-control" placeholder="">
+                      </div>
+                      <div class="form-group">
+                        <div class="row">
+                          <div class="col">
+                            <label class="form-label">
+                              Password
+                            </label>
+                          </div>
+                        </div>
+                        <div class="input-group">
+                          <input id="signin-password" class="form-control" type="password" placeholder="">
+                        </div>
+                      </div>
+                      <button id="signin-form" class="btn btn-lg w-100 btn-primary mb-3" type="button">
+                        Sign in
+                      </button>
+                      <div id="signin-spinner" class="text-center" style="display:none">
+                        <div class="spinner-grow" role="status">
+                          <span class="visually-hidden">Loading...</span>
+                        </div>
+                      </div>
+                      <div class="text-center" id="already-logged-text">
+                        <small class="text-muted text-center">
+                          Need to sign up? <a href="" id="login-link" onclick="showSignup()">Sign up</a>.
+                        </small>
+                      </div>
+                      <div id="signin-error"></div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              <hr class="mb-5">
+              <div class="nav row align-items-center">
+                <div class="col-auto">
+                  <a class="btn btn-lg btn-white" data-toggle="wizard" href="#wizardStepThree">Back</a>
+                </div>
+                <div class="col text-center">
+                </div>
+
+                <div class="col-auto">
+
+                  <button type="button" class="btn btn-danger mb-2" id="cancel-button" style="display:none;">Cancel
+                    Subscription</button>
+                </div>
+              </div>
+            </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  </div>
+  <script src="./assets/js/vendor.bundle.js"></script>
+  <script src="./assets/js/theme.bundle.js"></script>
+</body>
+
+</html>

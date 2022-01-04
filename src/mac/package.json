@@ -1,0 +1,90 @@
+{
+  "name": "unbox",
+  "version": "1.0.0",
+  "description": "unbox",
+  "main": "app/index.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "config": {
+    "forge": {
+      "electronRebuildConfig": {
+        "onlyModules": [
+          "better-sqlite3"
+        ]
+      }
+    }
+  },
+  "build": {
+    "productName": "unbox",
+    "appId": "com.erikrichardlarson.unbox",
+    "files": [
+      "app/**/*",
+      "app/denon/**/*",
+      "app/denon/*",
+      "node_modules/**/*",
+      "sqlcipher/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      "app/overlays/*",
+      "app/denon/services/deckState.json",
+      "app/config.json"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "directories": {
+      "output": "release"
+    },
+    "publish": {
+      "provider": "github",
+      "private": true
+    }
+  },
+  "devDependencies": {
+    "connect": "^3.7.0",
+    "electron": "^13.1.0",
+    "electron-builder": "^22.11.7",
+    "electron-packager": "^15.2.0",
+    "electron-rebuild": "^3.2.5",
+    "fs": "^0.0.1-security",
+    "mime": "^1.6.0",
+    "node-pre-gyp": "^0.17.0",
+    "path": "^0.12.7",
+    "playwright": "^1.11.1",
+    "serve-static": "^1.14.1",
+    "server": "^1.0.33",
+    "sqlite3": "^5.0.2"
+  },
+  "dependencies": {
+    "@journeyapps/sqlcipher": "^5.3.1",
+    "better-sqlite3": "^7.4.3",
+    "connect": "^3.7.0",
+    "console-stamp": "^3.0.3",
+    "electron-packager": "^15.2.0",
+    "electron-store": "^8.0.1",
+    "file-type": "^16.5.3",
+    "fs": "^0.0.1-security",
+    "ip": "^1.1.5",
+    "mime": "^1.6.0",
+    "minimist": "^1.2.5",
+    "node-pre-gyp": "^0.17.0",
+    "path": "^0.12.7",
+    "playwright": "^1.11.1",
+    "promise-socket": "^7.0.0",
+    "serve-static": "^1.14.1",
+    "server": "^1.0.33"
+  }
+}
