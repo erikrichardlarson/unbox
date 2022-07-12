@@ -50,7 +50,8 @@ class Poller {
                     ifnull(c.Title, '') as Track, 
                     ifnull(c.Subtitle, '') as Mix, 
                     ifnull(l.Name, '') as Label, 
-                    ifnull(a.Name, '') as Artist
+                    ifnull(a.Name, '') as Artist,
+                    ifnull(c.ImagePath, '') as Artwork
                     from djmdSongHistory as h
                     join djmdContent as c on h.ContentID = c.ID
                     left join djmdArtist as a on c.ArtistID = a.ID
