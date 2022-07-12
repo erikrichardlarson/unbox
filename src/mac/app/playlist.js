@@ -77,7 +77,8 @@ class Playlist {
     let mostrecentTrack = this.poller.currentTrackDetails['track'];
     let mostRecentLabel = this.poller.currentTrackDetails['label'];
     let mostrecentRemix = this.poller.currentTrackDetails['remix'];
-    let mostRecentArtwork = this.poller.currentTrackDetails['artwork'];
+
+    let mostRecentArtwork = this.ImageExists(this.poller.currentTrackDetails['artwork']);
 
     this.persister.writeToLocal(mostRecentArtist, mostrecentTrack, mostRecentLabel, mostrecentRemix, mostRecentArtwork);
   }
@@ -120,6 +121,25 @@ class Playlist {
       await browser.close();
       return
     }
+  }
+
+
+  ImageExists(artworkPath) 
+  {
+    var img = new Image();
+    img.src = artworkPath;
+
+    if (img.height != 0) {
+
+      return artworkPath
+
+    } 
+
+    else {
+
+      return '../../../images/no_album_art.jpg'
+
+    };
   }
 }
 
