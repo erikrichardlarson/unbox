@@ -137,7 +137,7 @@ class Playlist {
 
     else {
 
-      return '' // comment this out for now until '../../../images/no_album_art.jpg'
+      return '' // comment this out for now until the method is tested and a better location not found 'overlays/images/no_album_art.jpg'
 
     };
   }
