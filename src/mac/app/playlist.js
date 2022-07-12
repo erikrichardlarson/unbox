@@ -124,7 +124,7 @@ class Playlist {
   }
 
 
-  ImageExists(artworkPath) 
+  imageExists(artworkPath) 
   {
     var img = new Image();
     img.src = artworkPath;
