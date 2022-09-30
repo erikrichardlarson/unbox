@@ -15,18 +15,16 @@ If unbox is useful to you and you'd like to support future development, please f
 **Our supporters**
 
 <p float="left">
- <a href="https://www.twitch.tv/dj_frankwillard"><img src="https://static-cdn.jtvnw.net/jtv_user_pictures/e00acb7c-4b8b-4227-9642-c4f0a5ce5962-profile_image-70x70.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/e00acb7c-4b8b-4227-9642-c4f0a5ce5962-profile_image-70x70.png" width="80" height="80" /></a>
+
 <a href="https://www.twitch.tv/djaramistv"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/93f54a41-ec11-459a-885f-bb5ce4550aa9-profile_image-300x300.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/93f54a41-ec11-459a-885f-bb5ce4550aa9-profile_image-300x300.png" width="80" height="80" /></a>
   <a href="https://www.twitch.tv/reorderdj"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/7716d257-49e5-41ec-8404-2a4883507b2a-profile_image-70x70.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/7716d257-49e5-41ec-8404-2a4883507b2a-profile_image-70x70.png" width="80" height="80" /></a>
- <a href="https://www.twitch.tv/djnixinthemix"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/274b5a9f-e0e9-4f10-978b-38e35ced7736-profile_image-70x70.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/274b5a9f-e0e9-4f10-978b-38e35ced7736-profile_image-70x70.png" width="80" height="80" /></a>
   <a href="https://www.twitch.tv/hybrid_blak/"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/5596fc47-d7aa-4082-ae88-b4cc07ceb032-profile_image-300x300.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/5596fc47-d7aa-4082-ae88-b4cc07ceb032-profile_image-300x300.png" width="80" height="80" /></a>
- <a href="https://www.twitch.tv/nt_demon_au"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/d0ae4349-cbe5-4af2-83b6-3d407328fbde-profile_image-70x70.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/d0ae4349-cbe5-4af2-83b6-3d407328fbde-profile_image-70x70.png" width="80" height="80" /></a>
  <a href="https://www.twitch.tv/djrexy"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/djrexy-profile_image-de773f4e44dcdeca-70x70.jpeg" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/djrexy-profile_image-de773f4e44dcdeca-70x70.jpeg" width="80" height="80" /></a>
  <a href="https://www.twitch.tv/eddieselnyc"> <img src="https://static-cdn.jtvnw.net/jtv_user_pictures/4a8de8cf-13c7-4c41-880f-25bac2620470-profile_image-70x70.png" data-canonical-src="https://static-cdn.jtvnw.net/jtv_user_pictures/4a8de8cf-13c7-4c41-880f-25bac2620470-profile_image-70x70.png" width="80" height="80" /></a>
 </p>
 
 ## How to use
-1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/9.0/unbox_mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/9.2/unbox_windows.zip) 
+1. **Download the unbox desktop app.** Here's the mac version: [Mac Download](https://github.com/erikrichardlarson/unbox/releases/download/9.0/unbox_mac.zip) and here's the windows version: [Windows Download](https://github.com/erikrichardlarson/unbox/releases/download/10.1/unbox_windows.zip) 
 
 **Extra step for Traktor users only: If you're on Traktor, you also need to download this [D2 file](https://github.com/erikrichardlarson/unbox/releases/download/7.0/D2.zip), unzip and just place it in your CSI folder located at C:\Program Files\Native Instruments\Traktor Pro 3\Resources64\qml\CSI on Windows or /Applications/Native Instruments/Traktor Pro 3/Traktor.app/Contents/Resources/qml/CSI on Mac. There is a D2 folder already in this CSI directory so it's best to make a backup of that. And if you don't own a Kontrol D2, go to Controller Manager in your preferences, click Add beneath the device dropdown, and add Traktor then select Kontrol D2. I would automate this for you but permissioning makes it tricky, sorry Traktor users.**
 
