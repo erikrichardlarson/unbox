@@ -1,11 +1,11 @@
 <h1 align="center">unbox</h1>
 
 <h3 align="center">
- Display your rekordbox | Serato | Traktor | Denon | VirtualDJ | Mixxx tracks to your viewers on Twitch<br><br>Integrates with OBS and the <a href="https://dashboard.twitch.tv/extensions/8zta7n4h8nuf47x2leo161amjvq44d-0.0.8">ID?</a> Twitch extension <br>
+ Display your rekordbox, Serato, Traktor, Denon, VirtualDJ, Mixxx tracks to your viewers on Twitch<br><br>Integrates with OBS and the <a href="https://dashboard.twitch.tv/extensions/8zta7n4h8nuf47x2leo161amjvq44d-0.0.8">ID?</a> Twitch extension <br>
+ <br>Join the <a href="https://discord.gg/G28qc3SbUx" >Discord</a> for support and to provide any product feedback
 </h3>
 <p align="center">
   <img  style="width: 50%; height: 50%" src="https://user-images.githubusercontent.com/17460309/132113955-90231c26-057f-4505-b26a-79fe19bc0b5f.gif" />
- <img style="width: 25%; height: 25%"  alt="Screen Shot 2021-07-03 at 12 43 29 PM" src="https://user-images.githubusercontent.com/17460309/124365356-47eeb580-dbfc-11eb-950f-8b73fb03e7dd.png">
 </p>
 
 **Please back up your library before using this as corruption could occur, we're not responsible for any issues, or corruption that this software may cause to your library.**
