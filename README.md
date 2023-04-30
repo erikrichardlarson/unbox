@@ -40,10 +40,6 @@ If unbox is useful to you and you'd like to support future development, please f
  
 *  Three txt files. You also have access to a "unbox.txt" file in your home directory in a folder called unbox_output. You can add this as a text source in OBS, it updates in real time so you can display a plain text view of the current playing track. The other two files are artist.txt and track.txt which are just the artist and track separated. 
 
-4. **Integrate with Twitch Panel Extension**
-
-* To integrate with the Twitch panel extension you'll need to subscribe to Unbox Pro, this can be done in step four in the Unbox app. Once subscribed you'll get a unique token on each login to Unbox, you can enter this token into the configuration page of the Twitch extension and your tracks will now automatically appear in the Panel Extension. Up to 20 tracks will be displayed to your viewers, and remain there after you close Unbox. This way if your viewers show up late to your set, or miss your set they can still see what you've played. 
-
 ### Customize
 
 You can customize the text by adding CSS into the browser source in OBS. One use case would be to add a shadow. This can be useful to brighten or change the background lighting.
