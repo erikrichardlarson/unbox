@@ -1,61 +1,76 @@
 {
   "name": "unbox",
   "productName": "unbox",
-  "version": "1.0.0",
-  "description": "log rekordbox history",
+  "version": "11.0.0",
+  "description": "unbox - let others know what you're playing",
   "main": "src/index.js",
   "scripts": {
-    "start": "electron-forge start",
+    "start": "npm run build:renderer && electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "echo \"No linting configured\""
+    "build:renderer": "webpack",
+    "watch:renderer": "webpack serve",
+    "build:tailwind": "tailwindcss build src/tailwind.css -o public/tailwind.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/erikrichardlarson/unbox.git"
   },
   "keywords": [],
-  "author": "erikrichardlarson",
-  "license": "MIT",
-  "config": {
-    "forge": {
-      "packagerConfig": {},
-      "makers": [
-        {
-          "name": "@electron-forge/maker-squirrel",
-          "config": {
-            "name": "unbox"
-          }
-        },
-        {
-          "name": "@electron-forge/maker-zip",
-          "platforms": [
-            "darwin"
-          ]
-        },
-        {
-          "name": "@electron-forge/maker-deb",
-          "config": {}
-        },
-        {
-          "name": "@electron-forge/maker-rpm",
-          "config": {}
-        }
-      ]
-    }
+  "author": {
+    "name": "erikrichardlarson",
+    "email": "erikrichardlarson@gmail.com"
   },
+  "license": "MIT",
   "dependencies": {
-    "@journeyapps/sqlcipher": "^4.1.0",
-    "csv-writer": "^1.6.0",
-    "electron-builder": "^22.9.1",
-    "electron-rebuild": "^2.3.2",
-    "electron-squirrel-startup": "^1.0.0"
+    "@electron-forge/maker-dmg": "^6.1.1",
+    "@journeyapps/sqlcipher": "^5.3.1",
+    "@tailwindcss/forms": "^0.5.3",
+    "animejs": "^3.2.1",
+    "autoprefixer": "^10.4.14",
+    "axios": "^1.4.0",
+    "copy-webpack-plugin": "^11.0.0",
+    "electron-squirrel-startup": "^1.0.0",
+    "electron-store": "^8.1.0",
+    "express": "^4.18.2",
+    "lodash": "^4.17.21",
+    "playwright-chromium": "^1.32.3",
+    "postcss": "^8.4.22",
+    "react": "^18.2.0",
+    "react-color": "^2.19.3",
+    "react-colorful": "^5.6.1",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.10.0",
+    "server": "^1.0.38",
+    "tailwindcss": "^3.3.1",
+    "update-electron-app": "^2.0.1",
+    "userbase-js": "^2.8.0",
+    "ws": "^8.13.0"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^6.0.0-beta.50",
-    "@electron-forge/maker-deb": "^6.0.0-beta.50",
-    "@electron-forge/maker-rpm": "^6.0.0-beta.50",
-    "@electron-forge/maker-squirrel": "^6.0.0-beta.50",
-    "@electron-forge/maker-zip": "^6.0.0-beta.50",
-    "devtron": "^1.4.0",
-    "electron": "^9.3.2",
-    "electron-packager": "^15.1.0"
+    "@babel/core": "^7.21.4",
+    "@babel/preset-env": "^7.21.4",
+    "@babel/preset-react": "^7.18.6",
+    "@electron-forge/cli": "^6.1.1",
+    "@electron-forge/maker-deb": "^6.1.1",
+    "@electron-forge/maker-rpm": "^6.1.1",
+    "@electron-forge/maker-squirrel": "^6.1.1",
+    "@electron-forge/maker-zip": "^6.1.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^6.1.1",
+    "@headlessui/react": "^1.7.14",
+    "@heroicons/react": "^1.0.6",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "electron": "24.1.2",
+    "electron-notarize": "^1.2.2",
+    "electron-osx-sign": "^0.6.0",
+    "electron-store": "^8.1.0",
+    "html-webpack-plugin": "^5.5.1",
+    "postcss-loader": "^7.2.4",
+    "style-loader": "^3.3.2",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.3"
   }
 }
