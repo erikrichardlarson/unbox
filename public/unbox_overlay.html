@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="tailwind.css">
+  <title>Unbox Overlay</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+  <script>
+                            document.addEventListener('DOMContentLoaded', () => {
+                              const items = [{"id":1,"contentType":"NOW PLAYING","selector":".sweep-text-now-playing"},{"id":2,"contentType":"Artist","selector":".sweep-text-artist"},{"id":3,"contentType":"Title","selector":".sweep-text-title"},{"id":4,"contentType":"Label","selector":".sweep-text-label"}];
+                              items.forEach(item => {
+                                item.element = document.querySelector(item.selector);
+                              });
+                              const setupWebSocket = (elements) => {
+    const applyAnimation = (element, properties, duration = 1000) => {
+    if (!element) return;
+    anime({
+        targets: element,
+        ...properties,
+        duration: duration,
+        easing: 'easeInOutQuad'
+    });
+}
+    const resetAnimation = (element) => {
+    if (!element) return;
+    anime.remove(element);
+}
+    const socket = new WebSocket('ws://localhost:3000');
+
+    socket.addEventListener('message', (event) => {
+        const trackDetails = JSON.parse(event.data);
+
+        elements.forEach((item) => {
+            applyAnimation(item.element, { translateX: [0, '100%'], opacity: [1, 0] }, (1 + item.id * 0.1) * 1000);
+        });
+
+        setTimeout(() => {
+            const updateTrackDetails = (trackDetails, elements) => {
+    const applyAnimation = (element, properties, duration = 1000) => {
+    if (!element) return;
+    anime({
+        targets: element,
+        ...properties,
+        duration: duration,
+        easing: 'easeInOutQuad'
+    });
+}
+    const resetAnimation = (element) => {
+    if (!element) return;
+    anime.remove(element);
+}
+    elements.forEach((item) => {
+        let content;
+        switch (item.contentType) {
+            case 'NOW PLAYING':
+                content = 'NOW PLAYING';
+                break;
+            case 'Artist':
+                content = trackDetails.artist || '';
+                break;
+            case 'Title':
+                content = trackDetails.track || '';
+                break;
+            case 'Artist - Title':
+                content = trackDetails.artist && trackDetails.track ? `${trackDetails.artist} - '${trackDetails.track}'` : '';
+                break;
+            case 'Label':
+                content = trackDetails.artist && !trackDetails.label ? '' : `[${trackDetails.label}]`;
+                break;
+           case 'Album Art':
+                content = trackDetails.artwork || '';
+                break;
+            default:
+                content = '';
+        }
+
+        if (item.element) {
+            if (item.contentType === 'Album Art') {
+                item.element.style.display = content ? '' : 'none';
+                item.element.src = content;
+            } else {
+                item.element.textContent = content;
+            }
+        }
+    });
+
+    elements.forEach((item) => {
+        resetAnimation(item.element);
+        applyAnimation(item.element, { translateX: ['100%', 0], opacity: [0, 1] }, (1 + item.id * 0.1) * 1000);
+    });
+}
+            updateTrackDetails(trackDetails, elements);
+
+            elements.forEach((item) => {
+                resetAnimation(item.element);
+                applyAnimation(item.element, { translateX: ['100%', 0], opacity: [0, 1] }, (1 + item.id * 0.1) * 1000);
+            });
+
+        }, 1000);
+    });
+}
+                              setupWebSocket(items);
+                            });
+                            </script>
+  
+
+</head>
+<body>
+  <div class="relative w-full h-full"><div class="overflow-hidden rounded-lg max-w-2xl" style="background-color: transparent;"><div class="px-4 py-5 sm:p-6" style="background-color: transparent;"><div class="mx-auto max-w-fit min-w-fit" style="background-color: transparent;"><div class="flex items-stretch" style="background-color: transparent;"><div class="h-full" style="background-color: transparent;"><div class="w-full overflow-hidden rounded-s p-6 flex flex-col h-full"><div class="px-4 sm:px-2 order-2 sweep-text-banner" style="background-color: rgb(213, 207, 207); --end-bg-color:#d5cfcf;"><div class="text-6xl font-sans font-black mb-2 sweep-text-item sweep-text-now-playing" style="color: rgb(255, 229, 229);">NOW PLAYING</div></div><div class="px-4 order-3"><div class="text-2xl font-sans font-extrabold mb-1 sweep-text-item sweep-text-artist" style="color: rgb(44, 39, 39);">ID</div></div><div class="px-4 order-3"><div class="text-2xl font-sans font-extrabold mb-1 sweep-text-item sweep-text-title" style="color: rgb(0, 0, 0);">ID</div></div><div class="px-4 order-3"><div class="text-2xl font-sans font-light italic sweep-text-item sweep-text-label" style="color: rgb(0, 0, 0);">[ID]</div></div></div></div></div></div></div></div></div>
+</body>
+</html>
