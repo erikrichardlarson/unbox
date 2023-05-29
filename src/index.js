@@ -67,7 +67,8 @@ app.on("ready", async () => {
         },
         "Mixxx": () => poller.mixxx(),
         "VirtualDJ": () => poller.virtualDJ(),
-        "DJUCED": () => poller.djuced()
+        "DJUCED": () => poller.djuced(),
+        "Prolink": () => poller.prodjlink()
     };
 
     const runPoller = () => {
