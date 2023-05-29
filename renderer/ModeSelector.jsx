@@ -7,6 +7,7 @@ const modes = [
     { name: "Rekordbox" },
     { name: "Serato" },
     { name: "Traktor" },
+    { name: "Prolink" },
     { name: "VirtualDJ" },
     { name: "Mixxx" },
     { name: "DJUCED" },

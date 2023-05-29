@@ -7,14 +7,16 @@ const os = require('os');
 const Store = require("electron-store");
 const sqlite3 = require('@journeyapps/sqlcipher').verbose();
 const axios = require('axios');
+const prolinkConnect = require('prolink-connect');
 
-const store = new Store({ name: "unbox" });
+const store = new Store({name: "unbox"});
 
 class Poller {
 
     constructor(websocketServer) {
         this.websocketServer = websocketServer;
         this.lastTrack = null;
+        this.prodjlinkConnected = false;
     }
 
     isNewTrack(trackDetails) {
@@ -63,8 +65,7 @@ class Poller {
                 }
             });
             return mergedTrackDetails;
-        }
-        catch (e) {
+        } catch (e) {
             console.error(e);
             return currentTrackMetadata;
         }
@@ -80,6 +81,64 @@ class Poller {
             recommendedTracks = recommendedTracks.slice(-500);
         }
         store.set('recommendedTracks', recommendedTracks);
+    }
+
+    async prodjlink() {
+        if (this.prodjlinkConnected) {
+            return;
+        }
+
+        try {
+            this.prodjlinkConnected = true
+            const network = await prolinkConnect.bringOnline();
+            network.deviceManager.on("connected", (d) => console.log('Connected to device'));
+            await network.autoconfigFromPeers();
+            network.connect();
+            if (!network.isConnected()) {
+                throw new Error("Failed to connect to the network");
+            }
+
+            const processor = new prolinkConnect.MixstatusProcessor();
+            network.statusEmitter.on("status", (s) => processor.handleState(s));
+
+            processor.on("nowPlaying", async (state) => {
+                const {trackDeviceId, trackId, trackSlot, trackType} = state;
+                const track = await network.db.getMetadata({
+                    trackId,
+                    trackType,
+                    trackSlot,
+                    deviceId: trackDeviceId,
+                });
+
+                let trackDetails = {
+                    artist: track?.artist?.name,
+                    track: track?.title,
+                    label: track?.label?.name,
+                    remix: track?.remixer?.name
+                };
+
+                trackDetails.artwork = await this.getArtworkAsBase64(track.artwork?.path);
+
+                if (this.isNewTrack(trackDetails)) {
+                    trackDetails = await this.getTrackMetadata(trackDetails);
+                    this.websocketServer.broadcastMessage(trackDetails);
+                }
+            });
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    async getArtworkAsBase64(artworkPath) {
+        if (!artworkPath) return null;
+
+        try {
+            const data = await fs.promises.readFile(artworkPath);
+            return `data:image/jpeg;base64,${data.toString('base64')}`;
+        } catch (error) {
+            console.error(`Failed to convert artwork to base64: ${error}`);
+            return null;
+        }
     }
 
     async rekordbox() {
@@ -116,9 +175,7 @@ class Poller {
                     let remix = row['Mix'].toUpperCase();
                     let artwork = row['Artwork'];
                     let rekordboxArtworkDir = path.join(os.homedir(), 'Library', 'Pioneer', 'rekordbox', 'share', artwork);
-                    let data = fs.readFileSync(rekordboxArtworkDir);
-                    let base64Artwork = Buffer.from(data).toString('base64');
-                    let imageDataUrl = `data:jpeg;base64,${base64Artwork}`;
+                    let imageDataUrl = await this.getArtworkAsBase64(rekordboxArtworkDir);
                     let trackDetails = {
                         artist: artist, track: track, label: label,
                         remix: remix, artwork: imageDataUrl
@@ -142,8 +199,8 @@ class Poller {
         try {
             const context = await this.browser.newContext({timezoneId: 'Europe/London'});
             const page = await context.newPage();
-            await page.goto(`https://serato.com/playlists/${seratoUserId}`, { waitUntil: 'networkidle' });
-            await page.waitForSelector(".playlist-row-grid", { timeout: 2000 });
+            await page.goto(`https://serato.com/playlists/${seratoUserId}`, {waitUntil: 'networkidle'});
+            await page.waitForSelector(".playlist-row-grid", {timeout: 2000});
             const url = await page.evaluate(() => {
                 return document.getElementsByClassName('playlist-title')[0].href;
             });
@@ -267,7 +324,7 @@ class Poller {
             });
             db.close();
         });
-        
+
     }
 
     _getMostLikelyPlayingTraktorDeck(deckData) {
@@ -306,7 +363,17 @@ class Poller {
         this.webServer = server({port: 8081, security: {csrf: false}}, [
             post('/deckLoaded', async ctx => {
                 try {
-                    const {deck, artist, title, date, label, remixer, propXfaderAdjust, propVolume, isPlaying} = ctx.data;
+                    const {
+                        deck,
+                        artist,
+                        title,
+                        date,
+                        label,
+                        remixer,
+                        propXfaderAdjust,
+                        propVolume,
+                        isPlaying
+                    } = ctx.data;
                     if (!deck || typeof deck !== 'string' || !['A', 'B', 'C', 'D'].includes(deck)) {
                         ctx.status = 400;
                         ctx.body = {error: "Invalid or missing 'deck' parameter."};
@@ -391,7 +458,7 @@ class Poller {
                 try {
                 } catch (error) {
                     ctx.status = 500;
-                    ctx.body = { error: "Internal Server Error" };
+                    ctx.body = {error: "Internal Server Error"};
                 }
             })
         ])
