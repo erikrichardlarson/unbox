@@ -49,6 +49,7 @@
     "tailwindcss": "^3.3.1",
     "update-electron-app": "^2.0.1",
     "userbase-js": "^2.8.0",
+    "winston": "^3.9.0",
     "ws": "^8.13.0"
   },
   "devDependencies": {

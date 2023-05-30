@@ -13,8 +13,9 @@ const store = new Store({name: "unbox"});
 
 class Poller {
 
-    constructor(websocketServer) {
+    constructor(websocketServer, logger) {
         this.websocketServer = websocketServer;
+        this.logger = logger;
         this.lastTrack = null;
         this.prodjlinkConnected = false;
     }
@@ -84,21 +85,26 @@ class Poller {
     }
 
     async prodjlink() {
+        this.logger.info('Attempting to connect to Pro DJ Link...');
+
         if (this.prodjlinkConnected) {
+            this.logger.info('Already connected to Pro DJ Link');
             return;
         }
 
         try {
             this.prodjlinkConnected = true
             const network = await prolinkConnect.bringOnline();
-            network.deviceManager.on("connected", (d) => console.log('Connected to device'));
+            network.deviceManager.on("connected", (d) => this.logger.info('Connected to device'));
             await network.autoconfigFromPeers();
             network.connect();
             if (!network.isConnected()) {
                 throw new Error("Failed to connect to the network");
             }
 
-            const processor = new prolinkConnect.MixstatusProcessor();
+            this.logger.info('Network connected successfully');
+
+            const processor = new prolinkConnect.MixstatusProcessor({mode: prolinkConnect.MixstatusMode.FollowsMaster});
             network.statusEmitter.on("status", (s) => processor.handleState(s));
 
             processor.on("nowPlaying", async (state) => {
@@ -117,6 +123,8 @@ class Poller {
                     remix: track?.remixer?.name
                 };
 
+                this.logger.info(`Current track details: ${JSON.stringify(trackDetails)}`);
+
                 trackDetails.artwork = await this.getArtworkAsBase64(track.artwork?.path);
 
                 if (this.isNewTrack(trackDetails)) {
@@ -125,9 +133,10 @@ class Poller {
                 }
             });
         } catch (error) {
-            console.error(error);
+            this.logger.error(`Error: ${error.message}`);
         }
     }
+
 
     async getArtworkAsBase64(artworkPath) {
         if (!artworkPath) return null;
