@@ -6,16 +6,17 @@ const { Poller } = require("./poller");
 const WebSocketServer = require("./websocketServer");
 const Store = require("electron-store");
 const { resolve, join } = require("path");
-const { copyFile } = require("fs");
+const { copyFile, mkdirSync } = require("fs");
+const winston = require('winston');
+const updateElectronApp = require('update-electron-app');
 
 function copy(sourcePath, destPath) {
     return new Promise((resolve, reject) => {
         copyFile(sourcePath, destPath, (err) => {
             if (err) {
-                console.error(`Error copying file from ${sourcePath} to ${destPath}`);
+                console.error(`Error copying file from ${sourcePath} to ${destPath}: ${err}`);
                 reject(err);
             } else {
-                console.log(`File was copied to ${destPath}`);
                 resolve();
             }
         });
@@ -29,9 +30,22 @@ if (require("electron-squirrel-startup")) {
 let socketServer;
 let intervalId;
 
+const logDir = app.getPath('userData');
+
+mkdirSync(logDir, { recursive: true });
+
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.File({ filename: join(logDir, 'error.log'), level: 'error' }),
+        new winston.transports.File({ filename: join(logDir, 'combined.log') }),
+    ],
+});
+
 app.on("ready", async () => {
     const mainWindow = createWindow();
-    require('update-electron-app')()
+    updateElectronApp();
     const store = new Store({ name: "unbox" });
 
     const userDataPath = app.getPath('userData');
@@ -49,14 +63,14 @@ app.on("ready", async () => {
             copy(sourceOverlayHtmlPath, destOverlayHtmlPath)
         ]);
     } catch(err) {
-        console.error('Error occurred during file copy: ', err);
+        console.error(`Error occurred during file copy: ${err}`);
     }
 
     initializeIpcHandlers(mainWindow);
     startExpressServer();
     socketServer = new WebSocketServer(3000);
     socketServer.startServer();
-    const poller = new Poller(socketServer);
+    const poller = new Poller(socketServer, logger);
 
     const pollerActions = {
         "Rekordbox": () => poller.rekordbox(),
