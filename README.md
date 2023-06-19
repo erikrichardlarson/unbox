@@ -24,7 +24,7 @@
 
 Unbox is designed to be simple to use while providing the most accurate track metadata software. Download the app, unzip, launch, pick your mode, and copy the URLs into OBS. If you encounter any issues, please create an issue here, and we'll respond ASAP.
 
-1. **Download and install the Unbox desktop app**. Here's the [Mac version](https://github.com/erikrichardlarson/unbox/releases/download/11/unbox-mac.zip) and the [Windows version](https://github.com/erikrichardlarson/unbox/releases/download/11/unbox_win.zip).
+1. **Download and install the Unbox desktop app**. Here's the [Mac version](https://github.com/erikrichardlarson/unbox/releases/download/11/unbox-mac.zip) and the [Windows version](https://github.com/erikrichardlarson/unbox/releases/download/11/unbox-win.zip).
 
 2. **Launch the app and select Your DJ Mode**. Simply select the mode that corresponds to your DJ software.
 
