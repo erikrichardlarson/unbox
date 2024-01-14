@@ -95,3 +95,4 @@ dist/
 
 entitlements.plist
 dist/renderer
+.idea/
