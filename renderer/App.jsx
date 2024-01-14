@@ -12,7 +12,7 @@ const App = () => {
 
     return (
         <div className="w-full h-screen flex flex-col items-start justify-start p-4 bg-white">
-            <div className="w-full flex justify-between items-center mb-4">
+            <div className="w-full flex justify-between items-center">
                 <div className="flex items-center">
                     <img src={logo} alt="Unbox Logo" className="h-8 w-8 mr-2"/>
                     <h1 className="text-2xl font-black text-left">unbox</h1>

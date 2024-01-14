@@ -32,7 +32,7 @@ const ASOT = () => {
                                                 className = "text-6xl font-sans font-black sweep-text-item sweep-text-now-playing";
                                                 style = {color: mergedColors.nowPlaying};
                                                 return (
-                                                    <div key={item.id} className="px-4 sm:px-2 order-2 sweep-text-banner flex items-center justify-center mb-2" style={{backgroundColor: mergedColors.backgroundColor, '--end-bg-color': mergedColors.backgroundColor}}>
+                                                    <div key={item.id} className="px-4 sm:px-2 order-2 sweep-text-banner flex mb-2" style={{width: 'fit-content', backgroundColor: mergedColors.backgroundColor, '--end-bg-color': mergedColors.backgroundColor}}>
                                                         <div className={className} style={style}>
                                                             {item.contentType}
                                                         </div>
@@ -40,7 +40,7 @@ const ASOT = () => {
                                                 )
                                             case 'Artist':
                                                 className = "text-2xl font-sans font-extrabold mb-1 sweep-text-item sweep-text-artist";
-                                                style = {color: mergedColors.artist};
+                                                style = {color: mergedColors.artist, flexShrink: 0};
                                                 break;
                                             case 'Title':
                                                 className = "text-2xl font-sans font-extrabold mb-1 sweep-text-item sweep-text-title";

@@ -45,22 +45,14 @@ const logger = winston.createLogger({
 
 app.on("ready", async () => {
     const mainWindow = createWindow();
-    updateElectronApp();
     const store = new Store({ name: "unbox" });
-
     const userDataPath = app.getPath('userData');
     const sourceCssPath = resolve(__dirname, "..", "public", "tailwind.css");
     const destCssPath = join(userDataPath, 'tailwind.css');
-    const sourceHtmlPath = resolve(__dirname, "..", "public", "album_art.html");
-    const destHtmlPath = join(userDataPath, 'album_art.html');
-    const sourceOverlayHtmlPath = resolve(__dirname, "..", "public", "unbox_overlay.html");
-    const destOverlayHtmlPath = join(userDataPath, 'unbox_overlay.html');
 
     try {
         await Promise.all([
             copy(sourceCssPath, destCssPath),
-            copy(sourceHtmlPath, destHtmlPath),
-            copy(sourceOverlayHtmlPath, destOverlayHtmlPath)
         ]);
     } catch(err) {
         console.error(`Error occurred during file copy: ${err}`);
@@ -82,7 +74,8 @@ app.on("ready", async () => {
         "Mixxx": () => poller.mixxx(),
         "VirtualDJ": () => poller.virtualDJ(),
         "DJUCED": () => poller.djuced(),
-        "Prolink": () => poller.prodjlink()
+        "Prolink": () => poller.prodjlink(),
+        "djay Pro": () => poller.djayPro(),
     };
 
     const runPoller = () => {

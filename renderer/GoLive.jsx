@@ -1,6 +1,6 @@
-import React, {useRef, useEffect, useCallback, useState} from 'react';
-import {debounce} from 'lodash';
-import {ColorProvider} from "./ColorContext";
+import React, { useRef, useEffect, useCallback, useState } from 'react';
+import { debounce } from 'lodash';
+import { ColorProvider } from "./ColorContext";
 import ASOT from "./ASOT";
 import ConnectionStatus from "./ConnectionStatus";
 
@@ -8,9 +8,13 @@ import ConnectionStatus from "./ConnectionStatus";
 export default function GoLive() {
     const localOverlayRef = useRef();
     const remoteOverlayRef = useRef();
+    const localAlbumArtRef = useRef();
+    const remoteAlbumArtRef = useRef();
     const [localOverlay, setLocalOverlay] = useState('');
     const [remoteOverlay, setRemoteOverlay] = useState('');
     const [toastVisible, setToastVisible] = useState(false);
+    const [localAlbumArt, setLocalAlbumArt] = useState('');
+    const [remoteAlbumArt, setRemoteAlbumArt] = useState('');
 
     const getComponentByName = (name) => {
         switch (name) {
@@ -34,6 +38,13 @@ export default function GoLive() {
                 );
                 setRemoteOverlay(
                     `http://${localIP}:8001/unbox_overlay.html`
+                );
+
+                setLocalAlbumArt(
+                    'http://localhost:8001/album_art.html'
+                );
+                setRemoteAlbumArt(
+                    `http://${localIP}:8001/album_art.html`
                 );
             }
         })();
@@ -65,10 +76,9 @@ export default function GoLive() {
         []
     );
 
-    return (
-        <>
-            <div>
-                <ConnectionStatus/>
+    return (<>
+            <div className="flex flex-col min-w-max">
+                <ConnectionStatus />
                 {toastVisible && (
                     <div className="fixed top-0 left-1/2 transform -translate-x-1/2 p-6">
                         <div className="bg-green-500 text-white text-sm px-3 py-1.5 rounded-md shadow-md">
@@ -76,54 +86,95 @@ export default function GoLive() {
                         </div>
                     </div>
                 )}
-                {['Local Overlay', 'Remote Overlay'].map((label, index) => (
-                    <div key={index} className="mb-4">
-                        <div className="mt-2 flex rounded-md shadow-sm max-w-md mx-auto">
-                            <div className="relative flex flex-grow items-stretch focus-within:z-10">
-                                <input
-                                    ref={index === 0 ? localOverlayRef : remoteOverlayRef}
-                                    type="text"
-                                    name={label}
-                                    id={label}
-                                    value={index === 0 ? localOverlay : remoteOverlay}
-                                    onChange={(e) => {
-                                        if (index === 0) {
-                                            setLocalOverlay(e.target.value);
-                                        } else {
-                                            setRemoteOverlay(e.target.value);
-                                        }
-                                        handleInputChange(
-                                            index === 0 ? 'localOverlay' : 'remoteOverlay',
-                                            e.target.value
-                                        );
-                                    }}
-                                    className="block flex-grow rounded-none rounded-l-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                    placeholder={label}
-                                />
+                <div className="mb-8 p-4 border border-gray-300 rounded-md">
+                    <h2 className="text-xl font-semibold mb-4">Overlay</h2>
+                    {['Local', 'Remote'].map((label, index) => (
+                        <div key={index} className="mb-4">
+                            <h2 className="text-sm font-semibold mb-2">{label}</h2>
+                            <div className="mt-2 flex rounded-md shadow-sm max-w-md mx-auto">
+                                <div className="relative flex flex-grow items-stretch focus-within:z-10">
+                                    <input
+                                        ref={index === 0 ? localOverlayRef : remoteOverlayRef}
+                                        type="text"
+                                        name={label}
+                                        id={label}
+                                        value={index === 0 ? localOverlay : remoteOverlay}
+                                        onChange={(e) => {
+                                            if (index === 0) {
+                                                setLocalOverlay(e.target.value);
+                                            } else if (index === 1) {
+                                                setRemoteOverlay(e.target.value);
+                                            }
+                                            handleInputChange(
+                                                index === 0 ? 'localOverlay' : 'remoteOverlay',
+                                                e.target.value
+                                            );
+                                        }}
+                                        className="block flex-grow rounded-none rounded-l-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                        placeholder={label}
+                                    />
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        copyToClipboard(
+                                            index === 0 ? localOverlayRef : remoteOverlayRef,
+                                            label,
+                                            index === 0 ? 'localOverlay' : 'remoteOverlay'
+                                        )
+                                    }
+                                    className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                                >Copy
+                                </button>
                             </div>
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    copyToClipboard(
-                                        index === 0 ? localOverlayRef : remoteOverlayRef,
-                                        label,
-                                        index === 0 ? 'localOverlay' : 'remoteOverlay'
-                                    )
-                                }
-                                className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                            >Copy
-                            </button>
                         </div>
+                    ))}
+                </div>
+                <div className="mb-4 p-4 border border-gray-300 rounded-md">
+                <h2 className="text-xl font-semibold mb-4">Album Art</h2>
+                {['Local', 'Remote'].map((label, index) => (
+                    <div key={index} className="mb-4">
+                    <h2 className="text-sm font-semibold mb-2">{label}</h2>
+                    <div className="mt-2 flex rounded-md shadow-sm max-w-md mx-auto">
+                        <div className="relative flex flex-grow items-stretch focus-within:z-10">
+                            <input
+                                ref={index === 0 ? localAlbumArtRef : remoteAlbumArtRef}
+                                type="text"
+                                name={label}
+                                id={label}
+                                value={index === 0 ? localAlbumArt : remoteAlbumArt}
+                                onChange={(e) => {
+                                    if (index === 0) {
+                                        setLocalAlbumArt(e.target.value);
+                                    } else if (index === 1) {
+                                        setRemoteAlbumArt(e.target.value);
+                                    } 
+                                    handleInputChange(
+                                        index === 0 ? 'localAlbumArt' : 'remoteAlbumArt',
+                                        e.target.value
+                                    );
+                                }}
+                                className="block flex-grow rounded-none rounded-l-md border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                placeholder={label}
+                            />
+                        </div>
+                        <button
+                            type="button"
+                            onClick={() =>
+                                copyToClipboard(
+                                    index === 0 ? localAlbumArtRef : remoteAlbumArtRef,
+                                    label,
+                                    index === 0 ? 'localAlbumArt' : 'remoteAlbumArt'
+                                )
+                            }
+                            className="relative -ml-px inline-flex items-center gap-x-1.5 rounded-r-md px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        >Copy
+                        </button>
                     </div>
+                </div>
                 ))}
-                <div className="bg-gray-300 rounded-lg p-6 shadow-2xl">
-                            <ColorProvider>
-                                {React.createElement(getComponentByName(selectedOption))}
-                            </ColorProvider>
                 </div>
             </div>
         </>
     );
 }
-
-export {GoLive};

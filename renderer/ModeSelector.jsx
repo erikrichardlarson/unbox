@@ -11,13 +11,13 @@ const modes = [
     { name: "VirtualDJ" },
     { name: "Mixxx" },
     { name: "DJUCED" },
+    { name: "djay Pro" }
 ];
 
 const ModeSelector = () => {
     const { selectedMode, setSelectedMode } = useContext(ModeContext);
     const [seratoUserId, setSeratoUserId] = useState(window.electron.store.get("seratoUserId") || "");
     const { connected, setConnected } = useContext(ConnectedContext);
-
 
     useEffect(() => {
         if (selectedMode === "Serato") {

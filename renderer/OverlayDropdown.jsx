@@ -8,10 +8,12 @@ function classNames(...classes) {
 
 const OverlayDropdown = ({ options, onChange, selectedOption }) => {
   return (
+    <div>
+    <h2 class="text-lg font-bold mb-2">Overlay</h2>
       <Listbox value={selectedOption} onChange={onChange}>
         {({ open }) => (
             <>
-              <div className="mt-1 relative mb-12">
+              <div className="mt-1 relative mb-4">
                 <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg border border-gray-300 shadow-sm cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                   <span className="block truncate">{selectedOption.name}</span>
                   <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
@@ -59,6 +61,7 @@ const OverlayDropdown = ({ options, onChange, selectedOption }) => {
             </>
         )}
       </Listbox>
+      </div>
   )
 }
 

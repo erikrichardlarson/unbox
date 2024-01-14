@@ -32,7 +32,11 @@ export const updateTrackDetails = `const updateTrackDetails = (trackDetails, ele
             if (item.contentType === 'Album Art') {
                 item.element.style.display = content ? '' : 'none';
                 item.element.src = content;
-            } else {
+            } 
+            else if (item.contentType === 'NOW PLAYING') {
+                document.querySelector('.sweep-text-now-playing').textContent = 'NOW PLAYING';
+            }
+            else {
                 item.element.textContent = content;
             }
         }
