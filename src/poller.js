@@ -187,6 +187,9 @@ class Poller {
                     let remix = row['Mix'].toUpperCase();
                     let artwork = row['Artwork'];
                     let imageDataUrl = null;
+                    if (remix) {
+                        track = `${track} (${remix})`;
+                    }
                     if (artwork) {
                         let rekordboxArtworkDir = path.join(os.homedir(), 'Library', 'Pioneer', 'rekordbox', 'share', artwork);
                         let data = await Jimp.read(rekordboxArtworkDir);
