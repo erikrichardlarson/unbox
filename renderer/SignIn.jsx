@@ -7,7 +7,6 @@ const includedFeatures = [
     'Real-time Metadata API Integration: Unbox gathers precise track metadata including album artwork once your track is loaded. Leveraging trusted external sources, this fills in any missing metadata and cleans up any inconsistencies.',
     'Follow the Master Channel: Exclusive to Unbox Plus, we only unveil tracks to your listeners when your listeners hear the track. This currently works with Traktor, Serato, and VirtualDJ.',
     'Personalized Recommendations: Let Unbox help you with your next mix, we recommend up to 500 tracks for your next mix, curated specifically based on your historical tracklist preferences.',
-    'Automatic Updates: Be the first to get our latest feature additions.'
 ]
 
 const Spinner = () => (
@@ -15,7 +14,6 @@ const Spinner = () => (
         <div className="animate-spin w-12 h-12 border-t-2 border-b-2 border-indigo-500 rounded-full"></div>
     </div>
 );
-
 
 
 function Subscribe() {
@@ -27,7 +25,7 @@ function Subscribe() {
         userbase.purchaseSubscription({
             successUrl: 'https://github.com/erikrichardlarson/unbox',
             cancelUrl: 'https://github.com/erikrichardlarson/unbox',
-            priceId: 'price_1J8BeeA3OaUfbwuDsFOd2Xf8'
+            priceId: 'price_1N9YpFA3OaUfbwuD83R0pxLw'
         }).then(() => {
             alert('Subscription purchased!');
             handleLogout();
@@ -253,7 +251,7 @@ function LoginSignup() {
                                                 htmlFor="username"
                                                 className="block text-sm font-medium leading-6 text-gray-900"
                                             >
-                                                Username
+                                                Email
                                             </label>
                                             <div className="mt-2">
                                                 <input
@@ -322,7 +320,7 @@ function LoginSignup() {
                                                 htmlFor="username-login"
                                                 className="block text-sm font-medium leading-6 text-gray-900"
                                             >
-                                                Username
+                                                Email
                                             </label>
                                             <div className="mt-2">
                                                 <input

@@ -42,12 +42,12 @@ const ConnectionStatus = () => {
         ? `We're connected to your ${selectedMode} instance.`
         : timeoutReached
             ? "We're having trouble connecting. Please reach out to us for support."
-            : `Please wait while we connect to your ${selectedMode} instance`;
+            : `We're connecting to your ${selectedMode} instance`;
 
     return (
-        <div className="flex flex-col items-center justify-center">
-            <p className="text-lg font-bold mb-2">{text}</p>
-            <div className="relative grid place-items-center h-16 w-16 mb-2">
+        <div className="flex flex-col items-center justify-center min-w-max">
+            <p className="text-lg font-bold">{text}</p>
+            <div className="relative grid place-items-center h-16 w-16">
                 {discovering && (
                     <span className="relative grid place-items-center h-6 w-6">
                 <span

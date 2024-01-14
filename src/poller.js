@@ -8,6 +8,8 @@ const Store = require("electron-store");
 const sqlite3 = require('@journeyapps/sqlcipher').verbose();
 const axios = require('axios');
 const prolinkConnect = require('prolink-connect');
+const Jimp = require('jimp');
+const chokidar = require('chokidar');
 
 const store = new Store({name: "unbox"});
 
@@ -18,6 +20,7 @@ class Poller {
         this.logger = logger;
         this.lastTrack = null;
         this.prodjlinkConnected = false;
+        this.djayProWatcherSet = false;
     }
 
     isNewTrack(trackDetails) {
@@ -183,8 +186,16 @@ class Poller {
                     let label = row['Label'].toUpperCase();
                     let remix = row['Mix'].toUpperCase();
                     let artwork = row['Artwork'];
-                    let rekordboxArtworkDir = path.join(os.homedir(), 'Library', 'Pioneer', 'rekordbox', 'share', artwork);
-                    let imageDataUrl = await this.getArtworkAsBase64(rekordboxArtworkDir);
+                    let imageDataUrl = null;
+                    if (artwork) {
+                        let rekordboxArtworkDir = path.join(os.homedir(), 'Library', 'Pioneer', 'rekordbox', 'share', artwork);
+                        let data = await Jimp.read(rekordboxArtworkDir);
+                        data = await data
+                            .resize(300, 300)
+                            .quality(100)
+                            .getBufferAsync(Jimp.MIME_JPEG);
+                        imageDataUrl = `data:image/jpeg;base64,${data.toString('base64')}`;
+                    }
                     let trackDetails = {
                         artist: artist, track: track, label: label,
                         remix: remix, artwork: imageDataUrl
@@ -250,6 +261,49 @@ class Poller {
             return [];
         }
     }
+
+    djayPro() {
+
+        if (this.djayProWatcherSet) {
+            return;
+        }
+
+        const homeDirectory = os.homedir();
+        const filePath = path.join(homeDirectory, 'Music', 'djay', 'djay Media Library.djayMediaLibrary', 'NowPlaying.txt');
+        const watcher = chokidar.watch(filePath, {
+          persistent: true
+        });
+
+        const onFileContentChange = async (path) => {
+            try {
+                const data = await fs.promises.readFile(path, 'utf8');
+                const lines = data.split('\n');
+                let trackDetails = {
+                    artist: '',
+                    track: '',
+                    label: '',
+                    remix: '',
+                    artwork: ''
+                };
+                for (let line of lines) {
+                    if (line.startsWith('Title: ')) {
+                        trackDetails.track = line.slice('Title: '.length);
+                    } else if (line.startsWith('Artist: ')) {
+                        trackDetails.artist = line.slice('Artist: '.length);
+                    }
+                }
+                if (this.isNewTrack(trackDetails)) {
+                    trackDetails = await this.getTrackMetadata(trackDetails);
+                    this.websocketServer.broadcastMessage(trackDetails);
+                }
+            } catch (err) {
+                console.error(`Error reading file: ${err}`);
+            }
+        };
+        watcher.on('change', onFileContentChange);
+        this.djayProWatcherSet = true;
+    }
+
 
     virtualDJ() {
 
@@ -383,6 +437,8 @@ class Poller {
                         propVolume,
                         isPlaying
                     } = ctx.data;
+                    this.logger.info(`Deck loaded with data: ${JSON.stringify(ctx.data)}`);
+
                     if (!deck || typeof deck !== 'string' || !['A', 'B', 'C', 'D'].includes(deck)) {
                         ctx.status = 400;
                         ctx.body = {error: "Invalid or missing 'deck' parameter."};
@@ -417,12 +473,14 @@ class Poller {
                     ctx.status = 200;
                     ctx.body = {message: "Deck loaded successfully."};
                 } catch (error) {
+                    console.info('There was an error')
                     ctx.status = 500;
                     ctx.body = {error: "Internal Server Error"};
                 }
             }),
             post('/updateDeck', async ctx => {
                 try {
+                    this.logger.info(`Deck updated with data: ${JSON.stringify(ctx.data)}`);
                     const {deck, propVolume, propXfaderAdjust, isPlaying} = ctx.data;
                     if (!deck || typeof deck !== 'string' || !['A', 'B', 'C', 'D'].includes(deck)) {
                         ctx.status = 400;

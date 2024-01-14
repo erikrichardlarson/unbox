@@ -1,9 +1,28 @@
 const appleId = process.env.APPLE_ID;
 const appleIdPassword = process.env.APPLE_APP_PASSWORD;
+const teamId = process.env.APPLE_TEAM_ID;
+const fs = require('fs');
+const path = require('path');
 
 module.exports = {
     "electronRebuildConfig": {
         "onlyModules": []
+    },
+    hooks: {
+        packageAfterPrune: async (forgeConfig, buildPath, electronVersion, platform, arch) => {
+            if (platform === 'darwin') {
+                try {
+                fs.unlinkSync(path.join(buildPath, 'node_modules/better-sqlite3/build/node_gyp_bins/python3'))
+                } catch (e) {
+                    console.log(e);
+                }
+                try {
+                    fs.unlinkSync(path.join(buildPath, 'node_modules/lzma-native/build/node_gyp_bins/python3'))
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+        }
     },
     plugins: [
         {
@@ -28,12 +47,12 @@ module.exports = {
         osxNotarize: {
             appleId,
             appleIdPassword,
+            teamId: teamId
         },
         "icon": "logo.icns",
         "asar": true,
         "arch": [
             "x64",
-            "arm64"
         ],
         "extraResource": [
             "./public"
@@ -84,6 +103,9 @@ module.exports = {
             "name": "@electron-forge/maker-dmg",
             "config": {
                 "name": "unbox",
+                "arch": [
+                    "universal",
+                ],
                 "platforms": [
                     "darwin"
                 ]
