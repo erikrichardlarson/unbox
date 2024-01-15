@@ -27,7 +27,7 @@
             }
 
             const setupWebSocket = (elements) => {
-                const socket = new WebSocket('ws://10.0.0.162:3000');
+                const socket = new WebSocket('ws://WEBSOCKET_IP:3000');
 
                 socket.addEventListener('message', (event) => {
                     const trackDetails = JSON.parse(event.data);

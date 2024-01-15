@@ -54,14 +54,14 @@ app.on("ready", async () => {
     const destCssPath = join(userDataPath, 'tailwind.css');
 
     try {
-        const localIP = getLocalIP();
-        let data = await fs.promises.readFile(sourceHtmlPath, 'utf8');
-        data = data.replace('WEBSOCKET_IP', localIP);
-        await fs.promises.writeFile(sourceHtmlPath, data, 'utf8');
         await Promise.all([
             copy(sourceCssPath, destCssPath),
             copy(sourceHtmlPath, destHtmlPath),
         ]);
+        const localIP = getLocalIP();
+        let data = await fs.promises.readFile(destHtmlPath, 'utf8');
+        data = data.replace('WEBSOCKET_IP', localIP);
+        await fs.promises.writeFile(destHtmlPath, data, 'utf8');
     } catch(err) {
         console.error(`Error occurred during file copy: ${err}`);
     }
