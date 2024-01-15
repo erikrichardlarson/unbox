@@ -1,5 +1,6 @@
 const { app, BrowserWindow } = require("electron");
 const { createWindow } = require("./window");
+const { getLocalIP } = require("./localIP");
 const { initializeIpcHandlers } = require("./ipcHandlers");
 const { startExpressServer, closeExpressServer } = require("./expressServer");
 const { Poller } = require("./poller");
@@ -8,7 +9,7 @@ const Store = require("electron-store");
 const { resolve, join } = require("path");
 const { copyFile, mkdirSync } = require("fs");
 const winston = require('winston');
-const updateElectronApp = require('update-electron-app');
+const fs = require('fs');
 
 function copy(sourcePath, destPath) {
     return new Promise((resolve, reject) => {
@@ -48,11 +49,18 @@ app.on("ready", async () => {
     const store = new Store({ name: "unbox" });
     const userDataPath = app.getPath('userData');
     const sourceCssPath = resolve(__dirname, "..", "public", "tailwind.css");
+    const sourceHtmlPath = resolve(__dirname, "..", "public", "album_art.html");
+    const destHtmlPath = join(userDataPath, 'album_art.html');
     const destCssPath = join(userDataPath, 'tailwind.css');
 
     try {
+        const localIP = getLocalIP();
+        let data = await fs.promises.readFile(sourceHtmlPath, 'utf8');
+        data = data.replace('WEBSOCKET_IP', localIP);
+        await fs.promises.writeFile(sourceHtmlPath, data, 'utf8');
         await Promise.all([
             copy(sourceCssPath, destCssPath),
+            copy(sourceHtmlPath, destHtmlPath),
         ]);
     } catch(err) {
         console.error(`Error occurred during file copy: ${err}`);
