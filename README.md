@@ -2,7 +2,7 @@
 
 # **unbox**
 
-### Display your Rekordbox, Serato, Traktor, VirtualDJ, Mixxx, and DJUCED tracks to your viewers on Twitch
+### Display your Rekordbox, Serato, Traktor, VirtualDJ, Mixxx, DJUCED, and djay Pro tracks to your viewers on Twitch
 
 </div>
 <p align="center">
