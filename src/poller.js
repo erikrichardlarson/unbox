@@ -191,7 +191,13 @@ class Poller {
                         track = `${track} (${remix})`;
                     }
                     if (artwork) {
-                        let rekordboxArtworkDir = path.join(os.homedir(), 'Library', 'Pioneer', 'rekordbox', 'share', artwork);
+                        let rekordboxArtworkDir = null;
+                        if (process.platform == 'darwin') {
+                            rekordboxArtworkDir = path.join(os.homedir(), 'Library', 'Pioneer', 'rekordbox', 'share', artwork);
+                        }
+                        else {
+                            rekordboxArtworkDir = path.join(process.env.APPDATA, 'Pioneer', 'rekordbox', 'share', artwork);
+                        }
                         let data = await Jimp.read(rekordboxArtworkDir);
                         data = await data
                             .resize(300, 300)

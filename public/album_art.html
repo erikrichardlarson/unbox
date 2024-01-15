@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="tailwind.css">
+    <title>Unbox Overlay</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const items = [{"id": 5, "contentType": "Album Art", "selector": ".sweep-text-artwork"}];
+            items.forEach(item => {
+                item.element = document.querySelector(item.selector);
+            });
+
+            const applyAnimation = (element, animationName, duration) => {
+                if (!element) return;
+                const translateYValue = animationName === 'fadeIn' ? [100, 0] : [0, -100];
+                const opacityValue = animationName === 'fadeIn' ? [0, 1] : [1, 0];
+                return anime({
+                    targets: element,
+                    translateY: translateYValue,
+                    opacity: opacityValue,
+                    easing: 'easeOutExpo',
+                    duration: duration * 1000
+                });
+            }
+
+            const setupWebSocket = (elements) => {
+                const socket = new WebSocket('ws://10.0.0.162:3000');
+
+                socket.addEventListener('message', (event) => {
+                    const trackDetails = JSON.parse(event.data);
+
+                    elements.forEach((item) => {
+                        if (item.element.firstChild && item.contentType === 'Album Art') {
+                            let animation = applyAnimation(item.element.firstChild, 'fadeOut', 1 + item.id * 0.1);
+                            animation.finished.then(() => {
+                                item.element.removeChild(item.element.firstChild);
+                                if (trackDetails.artwork) {
+                                    const img = document.createElement('img');
+                                    img.src = trackDetails.artwork;
+                                    img.className = 'sweep-text-artwork';
+                                    item.element.appendChild(img);
+                                    applyAnimation(img, 'fadeIn', 1 + item.id * 0.1);
+                                }
+                            });
+                        } else if (trackDetails.artwork) {
+                            const img = document.createElement('img');
+                            img.src = trackDetails.artwork;
+                            img.className = 'sweep-text-artwork';
+                            item.element.appendChild(img);
+                            applyAnimation(img, 'fadeIn', 1 + item.id * 0.1);
+                        }
+                    });
+                });
+            }
+
+            setupWebSocket(items);
+        });
+    </script>
+</head>
+<body>
+<div class="relative w-full h-full">
+    <div class="overflow-hidden rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+            <div class="mx-auto max-w-fit min-w-fit">
+                <div class="flex items-stretch">
+                    <div class="w-1/8 flex-shrink-0 self-center">
+                        <div class="mr-2 h-32 w-32 flex items-center sweep-text-artwork sweep-text-item"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
