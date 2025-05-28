@@ -503,7 +503,7 @@ func (m *Model) View() string {
 		if m.mode == ModeVirtualDJ {
 			overlayInfo = append(overlayInfo, []string{"VirtualDJ API:", "http://localhost:8081"})
 		} else if m.mode == ModeTraktor {
-			overlayInfo = append(overlayInfo, []string{"Traktor API:", "http://localhost:8082"})
+			overlayInfo = append(overlayInfo, []string{"Traktor API:", "http://localhost:8081"})
 		} else if m.mode == ModeDenon {
 			overlayInfo = append(overlayInfo, []string{"StagelinQ:", "Listening for Denon devices..."})
 			if len(m.stagelinqDevices) > 0 {
@@ -704,7 +704,7 @@ func (m *Model) startVirtualDJServer() {
 	mux.HandleFunc("/activeDeck", m.poller.handleVirtualDJActiveDeck)
 
 	m.virtualDJServer = &http.Server{
-		Addr:    ":8082",
+		Addr:    ":8081",
 		Handler: mux,
 	}
 
@@ -712,19 +712,19 @@ func (m *Model) startVirtualDJServer() {
 }
 
 func (m *Model) startTraktorServer() {
-	m.logger.Println("Traktor: Starting Traktor HTTP server on :8082")
+	m.logger.Println("Traktor: Starting Traktor HTTP server on :8081")
 	mux := http.NewServeMux()
 	mux.HandleFunc("/deckLoaded", m.poller.handleTraktorDeckLoaded)
 	mux.HandleFunc("/updateDeck", m.poller.handleTraktorUpdateDeck)
 	mux.HandleFunc("/log", m.poller.handleTraktorLog)
 
 	m.traktorServer = &http.Server{
-		Addr:    ":8082",
+		Addr:    ":8081",
 		Handler: mux,
 	}
 
 	go func() {
-		m.logger.Println("Traktor: Traktor HTTP server listening on :8082")
+		m.logger.Println("Traktor: Traktor HTTP server listening on :8081")
 		if err := m.traktorServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			m.logger.Printf("Traktor: Traktor HTTP server ListenAndServe error: %v", err)
 		}
