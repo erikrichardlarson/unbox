@@ -5,7 +5,7 @@
 
 </div>
 <p align="center">
-  <img  src="preview.png" width="50%" height="50%" />
+  <img  src="preview.png" width="75%" height="75%" />
 </p>
 
 ## **Overview**
