@@ -91,7 +91,7 @@ When a new track is detected or track information is updated, the poller will se
   "label": "Label Name (optional)",
   "remix": "Remixer Name (optional)",
   "artwork": "base64_encoded_image_data (optional)",
-  "bpm": 128.0 (optional),
+  "bpm": "128.0 (optional)",
   "key": "C#m (optional)",
   "genre": "Techno (optional)",
   "album": "Album Name (optional)",
