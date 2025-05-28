@@ -10,7 +10,7 @@
 
 ## **Overview**
 
-Unbox is a lightweight Go-based poller that runs in the background, monitoring your DJ software. Unbox aims to be more efficient and smaller than many alternatives: while typical Electron-based DJ tracking tools can reach 300MB, Unbox is ~20MB. This poller exposes a WebSocket API, allowing you to connect your own custom frontend or integrate with other tools. The TUI (Terminal User Interface) application helps you configure and start this poller. For the easiest integration with your streaming setup, we have a set of [Premium Overlays](#premium-overlays).
+Unbox is a lightweight Go-based poller that runs in the background, monitoring your DJ software. Unbox aims to be efficient and smaller than many alternatives: while typical Electron-based DJ tracking tools can reach 300MB, Unbox is ~20MB. This poller exposes a WebSocket API, allowing you to connect your own custom frontend or integrate with other tools. The TUI (Terminal User Interface) application helps you configure and start this poller. For the easiest integration with your streaming setup, we have a set of [Premium Overlays](#premium-overlays).
 
 ## **Our Supporters**
 
