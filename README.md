@@ -10,7 +10,7 @@
 
 ## **Overview**
 
-Unbox is a lightweight Go-based poller that runs in the background, monitoring your DJ software. This poller exposes a WebSocket API, allowing you to connect your own custom frontend or integrate with other tools. The TUI (Terminal User Interface) application helps you configure and start this poller. For the easiest integration with your streaming setup, we have a set of [Premium Overlays](#premium-overlays).
+Unbox is a lightweight Go-based poller that runs in the background, monitoring your DJ software. Unbox aims to be more efficient and smaller than many alternatives: while typical Electron-based DJ tracking tools can reach 300MB, Unbox is ~20MB. This poller exposes a WebSocket API, allowing you to connect your own custom frontend or integrate with other tools. The TUI (Terminal User Interface) application helps you configure and start this poller. For the easiest integration with your streaming setup, we have a set of [Premium Overlays](#premium-overlays).
 
 ## **Our Supporters**
 
@@ -26,7 +26,7 @@ Unbox is a lightweight Go-based poller that runs in the background, monitoring y
 
 Unbox is designed to be simple to use while providing the most accurate track metadata software. Download the app, unzip, launch, pick your mode, and copy the URLs into OBS. If you encounter any issues, please create an issue here, and we'll respond ASAP.
 
-1. **Download and install the Unbox lightweight app**. Due to being built with Go, the application is very small and efficient. Here's the [Mac version](https://github.com/erikrichardlarson/unbox/releases/download/12/Unbox.zip) and the [Windows version](https://github.com/erikrichardlarson/unbox/releases/download/12/unbox.exe.zip).
+1. **Download and install the Unbox lightweight app** (around 20MB). Here's the [Mac version](https://github.com/erikrichardlarson/unbox/releases/download/12/Unbox.zip) and the [Windows version](https://github.com/erikrichardlarson/unbox/releases/download/12/unbox.exe.zip).
 
 2. **Launch the app**. You'll be greeted with a Terminal User Interface (TUI).
 
