@@ -42,7 +42,7 @@ Unbox is designed to be simple to use while providing the most accurate track me
     *   For VirtualDJ, download our [Windows plugin](https://github.com/erikrichardlarson/unbox/releases/download/11/UnboxPlugin.zip) or [Mac plugin](https://github.com/erikrichardlarson/unbox/releases/download/11/UnboxPlugin.bundle.zip), extract it, and place it in your `SoundEffect Plugins` folder. This is located at `C:\Users\YOUR_USERNAME\Documents\VirtualDJ\Plugins64\SoundEffect` on Windows or `/Users/<USER>/Library/Application Support/VirtualDJ/PluginsMacArm` on Mac. This plugin will be available in the `Sound Effects` dropdown in VirtualDJ as "WindowsUnboxPlugin" or "MacUnboxPlugin". Select the plugin in the dropdown:
 
 <p align="center">
-  <img src="virtualdj_plugin_dropdown.png" width="50%" height="50%" />
+  <img src="virtualdj_plugin_dropdown.png" width="25%" height="25%" />
 </p>
 
 ## **Usage**
