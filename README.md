@@ -26,7 +26,7 @@ Unbox is a lightweight Go-based poller that runs in the background, monitoring y
 
 Unbox is designed to be simple to use while providing the most accurate track metadata software. Download the app, unzip, launch, pick your mode, and copy the URLs into OBS. If you encounter any issues, please create an issue here, and we'll respond ASAP.
 
-1. **Download and install the Unbox lightweight app** (around 20MB). Here's the [Mac version](https://github.com/erikrichardlarson/unbox/releases/download/12/Unbox.zip) and the [Windows version](https://github.com/erikrichardlarson/unbox/releases/download/12/unbox.exe.zip).
+1. **Download and install the Unbox lightweight app** (around 20MB). Here's the [Mac version](https://github.com/erikrichardlarson/unbox/releases/download/12/Unbox.zip) and the [Windows version](https://github.com/erikrichardlarson/unbox/releases/download/12/unbox.exe.zip) and the [Linux verion](https://github.com/erikrichardlarson/unbox/releases/download/12/unbox-linux.zip).
 
 2. **Launch the app**. You'll be greeted with a Terminal User Interface (TUI).
 
